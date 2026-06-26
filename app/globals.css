@@ -3,25 +3,49 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --charcoal: #1c1a17;
+  --ember: #d6562a;
+  --palm: #2f4a3c;
+  --sand: #f4ece0;
+  --gold: #c9972f;
+  --background: var(--sand);
+  --foreground: var(--charcoal);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    @apply bg-sand text-charcoal;
   }
-}
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+
+  .shadow-ember {
+    box-shadow: 0 4px 24px rgba(214, 86, 42, 0.35);
+  }
+
+  .shadow-ember-lg {
+    box-shadow: 0 8px 32px rgba(214, 86, 42, 0.45);
+  }
+}
+
+/* Organic section divider */
+.section-divider {
+  clip-path: ellipse(80% 100% at 50% 100%);
+}
+
+.section-divider-top {
+  clip-path: ellipse(80% 100% at 50% 0%);
 }

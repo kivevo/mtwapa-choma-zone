@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Choma Zone Mtwapa Palms — Website
 
-## Getting Started
+Modern marketing website with Supabase backend for **Choma Zone Mtwapa Palms**, an open garden restaurant, bar, and events venue on the Mombasa–Malindi Highway, Mtwapa.
 
-First, run the development server:
+## Tech Stack
+
+- **Next.js 14** (App Router, TypeScript, Server Components)
+- **Tailwind CSS** + custom brand tokens (charcoal, ember, palm, sand, gold)
+- **Supabase** (Postgres, Auth, Storage, RLS)
+- **Framer Motion**, **React Hook Form**, **Zod**, **shadcn-style UI**
+
+## Quick Start
 
 ```bash
+cd choma-zone-mtwapa
+npm install
+cp .env.local.example .env.local
+# Add your Supabase credentials to .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The site works in **demo mode** without Supabase — fallback data is used automatically.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Supabase Setup
 
-## Learn More
+1. Create a project at [supabase.com](https://supabase.com)
+2. Run migrations in order via the SQL Editor:
+   - `supabase/migrations/001_initial_schema.sql`
+   - `supabase/migrations/002_seed_data.sql`
+3. Create a **public** Storage bucket named `gallery`
+4. Copy your project URL and keys to `.env.local`:
 
-To learn more about Next.js, take a look at the following resources:
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Create an admin user in Supabase Auth (Authentication → Users → Add user)
+6. Log in at `/admin`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Admin Dashboard (`/admin`)
 
-## Deploy on Vercel
+Authenticated owners can:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- View & update event inquiry status
+- Read contact form messages
+- Approve/hide testimonials
+- Toggle menu item availability
+- Edit site settings (hours, phones, happy hour text)
+- View gallery image metadata
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Upload real photos to the `gallery` Storage bucket and add rows to `gallery_images` via Supabase dashboard or extend the admin panel.
+
+## Pages
+
+| Route | Description |
+|-------|-------------|
+| `/` | Single-page marketing site (all sections) |
+| `/menu` | Full menu |
+| `/events` | Event types + inquiry form |
+| `/gallery` | Full filterable gallery |
+| `/admin` | Owner login |
+| `/admin/dashboard` | Content management |
+
+## Deployment (Vercel)
+
+1. Push to GitHub
+2. Import in Vercel
+3. Add environment variables
+4. Deploy
+
+## Real Business Details
+
+- **Location:** Opposite Galana Petrol Station, Mtwapa (Mombasa–Malindi Highway)
+- **Phone:** 0711 333 090 / 0722 878 481
+- **Email:** mtwapapalmsltd@gmail.com
+- **Instagram:** [@mtwapapalms](https://www.instagram.com/mtwapapalms)
+- **Facebook:** [ChomaZoneMtwapaPalm](https://www.facebook.com/ChomaZoneMtwapaPalm)
+- **TikTok:** [@chomazonemtwapa](https://www.tiktok.com/@chomazonemtwapa)
+
+## License
+
+Private — Choma Zone Mtwapa Palms Ltd.

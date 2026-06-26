@@ -1,0 +1,66 @@
+import {
+  getSiteSettings,
+  getMenuCategories,
+  getGalleryImages,
+  getEventTypes,
+  getTestimonials,
+  getCalendarEvents,
+  getSupabasePublicUrl,
+} from "@/lib/data";
+import { Hero } from "@/components/sections/hero";
+import { About } from "@/components/sections/about";
+import { MenuSection } from "@/components/sections/menu-section";
+import { GallerySection } from "@/components/sections/gallery-section";
+import { EventsSection } from "@/components/sections/events-section";
+import { FamilyFunSection } from "@/components/sections/family-fun";
+import { StopoverSection } from "@/components/sections/stopover";
+import { HappyHourSection } from "@/components/sections/happy-hour";
+import { TestimonialsSection } from "@/components/sections/testimonials";
+import { SocialShowcaseSection } from "@/components/sections/social-showcase";
+import { LocationSection } from "@/components/sections/location-section";
+import { RestaurantJsonLd } from "@/components/seo/json-ld";
+
+export default async function HomePage() {
+  const [
+    settings,
+    menuCategories,
+    galleryImages,
+    eventTypes,
+    testimonials,
+    calendarEvents,
+  ] = await Promise.all([
+    getSiteSettings(),
+    getMenuCategories(),
+    getGalleryImages(),
+    getEventTypes(),
+    getTestimonials(),
+    getCalendarEvents(),
+  ]);
+
+  const supabaseUrl = getSupabasePublicUrl();
+
+  return (
+    <>
+      <RestaurantJsonLd settings={settings} />
+      <Hero settings={settings} />
+      <About settings={settings} />
+      <MenuSection categories={menuCategories} preview />
+      <GallerySection
+        images={galleryImages}
+        supabaseUrl={supabaseUrl}
+        settings={settings}
+        preview
+      />
+      <EventsSection eventTypes={eventTypes} />
+      <FamilyFunSection settings={settings} />
+      <StopoverSection settings={settings} />
+      <HappyHourSection
+        settings={settings}
+        calendarEvents={calendarEvents}
+      />
+      <TestimonialsSection testimonials={testimonials} />
+      <SocialShowcaseSection settings={settings} />
+      <LocationSection settings={settings} />
+    </>
+  );
+}
