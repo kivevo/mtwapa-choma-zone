@@ -10,7 +10,7 @@ ADD COLUMN IF NOT EXISTS frontend_content jsonb DEFAULT '{
   "hero_title_highlight": "Nyama Choma",
   "hero_title_suffix": "Open Garden Hospitality",
   "hero_description": "Charcoal-grilled perfection in a lush makuti garden on the Mombasa–Malindi Highway. Sundowners, family fun, events & the coast''s favourite stopover spot.",
-  "hero_bg_image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&q=80",
+  "hero_bg_image": "/hero-bg-kenyan.png",
   
   "about_title": "More Than Just a Restaurant",
   "about_p1": "Since opening our doors, Choma Zone Mtwapa Palms has become the coast''s premier destination for authentic charcoal-grilled meats and unforgettable open-air dining.",
