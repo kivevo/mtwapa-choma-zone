@@ -3,12 +3,12 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Trash2, RotateCcw, Image, ShoppingBag, Tag, CalendarDays, Clock, AlertTriangle } from "lucide-react";
+import { Trash2, RotateCcw, Image as ImageIcon, ShoppingBag, Tag, CalendarDays, Clock, AlertTriangle } from "lucide-react";
 import { restoreRecycleBinItem, permanentlyDeleteItem } from "@/lib/actions";
 import { useConfirmDialog } from "@/components/admin/confirm-dialog";
 
 const TABLE_ICONS: Record<string, React.ReactNode> = {
-  gallery_images: <Image className="h-4 w-4 text-purple-500" />,
+  gallery_images: <ImageIcon className="h-4 w-4 text-purple-500" />,
   menu_items: <ShoppingBag className="h-4 w-4 text-orange-500" />,
   menu_categories: <Tag className="h-4 w-4 text-orange-400" />,
   event_types: <CalendarDays className="h-4 w-4 text-blue-500" />,

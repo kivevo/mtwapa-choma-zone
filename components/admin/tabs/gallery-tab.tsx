@@ -4,10 +4,10 @@ import { useState, useRef, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
-  Eye, EyeOff, Trash2, Upload, Plus, FolderPlus, X, Film, ImageIcon, Tag, Check,
+  Eye, EyeOff, Trash2, Upload, FolderPlus, X, Film, ImageIcon, Tag,
 } from "lucide-react";
 import {
-  createGalleryImage, deleteGalleryImage, updateGalleryImage,
+  createGalleryImage, deleteGalleryImage,
   toggleGalleryImageVisibility, createGalleryCategory, deleteGalleryCategory,
 } from "@/lib/actions";
 import { createClient } from "@/lib/supabase/client";

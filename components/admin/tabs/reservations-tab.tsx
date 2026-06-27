@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Check, X, Calendar, Clock, Users, Phone, Mail, FileText, Trash2, CheckCircle2, MessageCircle } from "lucide-react";
+import { Check, X, Calendar, Clock, Users, Mail, FileText, Trash2, CheckCircle2, MessageCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { updateReservationStatus } from "@/lib/actions";
 
