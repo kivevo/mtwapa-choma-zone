@@ -291,10 +291,8 @@ export async function toggleTestimonialApproval(id: string, approved: boolean) {
 
 export async function deleteGalleryImage(id: string) {
   if (!isSupabaseConfigured()) return { success: false, error: "Not configured" };
-
   const supabase = await createClient();
-  const { error } = await supabase.from("gallery_images").delete().eq("id", id);
-
+  const { error } = await supabase.from("gallery_images").update({ deleted_at: new Date().toISOString() }).eq("id", id);
   if (error) return { success: false, error: error.message };
   revalidatePath("/", "layout"); return { success: true };
 }
@@ -377,7 +375,7 @@ export async function updateMenuCategory(id: string, data: {
 export async function deleteMenuCategory(id: string) {
   if (!isSupabaseConfigured()) return { success: false, error: "Not configured" };
   const supabase = await createClient();
-  const { error } = await supabase.from("menu_categories").delete().eq("id", id);
+  const { error } = await supabase.from("menu_categories").update({ deleted_at: new Date().toISOString() }).eq("id", id);
   if (error) return { success: false, error: error.message };
   revalidatePath("/", "layout"); return { success: true };
 }
@@ -408,7 +406,7 @@ export async function updateMenuItem(id: string, data: {
 export async function deleteMenuItem(id: string) {
   if (!isSupabaseConfigured()) return { success: false, error: "Not configured" };
   const supabase = await createClient();
-  const { error } = await supabase.from("menu_items").delete().eq("id", id);
+  const { error } = await supabase.from("menu_items").update({ deleted_at: new Date().toISOString() }).eq("id", id);
   if (error) return { success: false, error: error.message };
   revalidatePath("/", "layout"); return { success: true };
 }
@@ -466,7 +464,7 @@ export async function updateEventType(id: string, data: {
 export async function deleteEventType(id: string) {
   if (!isSupabaseConfigured()) return { success: false, error: "Not configured" };
   const supabase = await createClient();
-  const { error } = await supabase.from("event_types").delete().eq("id", id);
+  const { error } = await supabase.from("event_types").update({ deleted_at: new Date().toISOString() }).eq("id", id);
   if (error) return { success: false, error: error.message };
   revalidatePath("/", "layout"); return { success: true };
 }
@@ -497,7 +495,68 @@ export async function updateCalendarEvent(id: string, data: {
 export async function deleteCalendarEvent(id: string) {
   if (!isSupabaseConfigured()) return { success: false, error: "Not configured" };
   const supabase = await createClient();
-  const { error } = await supabase.from("events_calendar").delete().eq("id", id);
+  const { error } = await supabase.from("events_calendar").update({ deleted_at: new Date().toISOString() }).eq("id", id);
+  if (error) return { success: false, error: error.message };
+  revalidatePath("/", "layout"); return { success: true };
+}
+
+// ── GALLERY CATEGORIES ────────────────────────────────────────────
+export async function createGalleryCategory(data: { name: string; slug: string; display_order: number }) {
+  if (!isSupabaseConfigured()) return { success: false, error: "Not configured" };
+  const supabase = await createClient();
+  const { error } = await supabase.from("gallery_categories").insert(data);
+  if (error) return { success: false, error: error.message };
+  revalidatePath("/", "layout"); return { success: true };
+}
+
+export async function deleteGalleryCategory(id: string) {
+  if (!isSupabaseConfigured()) return { success: false, error: "Not configured" };
+  const supabase = await createClient();
+  const { error } = await supabase.from("gallery_categories").update({ deleted_at: new Date().toISOString() }).eq("id", id);
+  if (error) return { success: false, error: error.message };
+  revalidatePath("/", "layout"); return { success: true };
+}
+
+// ── RECYCLE BIN ───────────────────────────────────────────────────
+export async function getRecycleBinItems() {
+  if (!isSupabaseConfigured()) return { success: false, items: [] };
+  const supabase = await createClient();
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - 30);
+
+  const [gallery, menuItems, menuCats, eventTypes, calEvents] = await Promise.all([
+    supabase.from("gallery_images").select("id, caption, storage_path, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
+    supabase.from("menu_items").select("id, name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
+    supabase.from("menu_categories").select("id, name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
+    supabase.from("event_types").select("id, name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
+    supabase.from("events_calendar").select("id, title, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
+  ]);
+
+  const items = [
+    ...(gallery.data ?? []).map((r) => ({ ...r, table: "gallery_images", label: r.caption || r.storage_path })),
+    ...(menuItems.data ?? []).map((r) => ({ ...r, table: "menu_items", label: r.name })),
+    ...(menuCats.data ?? []).map((r) => ({ ...r, table: "menu_categories", label: r.name })),
+    ...(eventTypes.data ?? []).map((r) => ({ ...r, table: "event_types", label: r.name })),
+    ...(calEvents.data ?? []).map((r) => ({ ...r, table: "events_calendar", label: r.title })),
+  ].sort((a, b) => new Date(b.deleted_at!).getTime() - new Date(a.deleted_at!).getTime());
+
+  return { success: true, items };
+}
+
+export async function restoreRecycleBinItem(table: string, id: string) {
+  if (!isSupabaseConfigured()) return { success: false, error: "Not configured" };
+  const supabase = await createClient();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabase.from(table as any) as any).update({ deleted_at: null }).eq("id", id);
+  if (error) return { success: false, error: error.message };
+  revalidatePath("/", "layout"); return { success: true };
+}
+
+export async function permanentlyDeleteItem(table: string, id: string) {
+  if (!isSupabaseConfigured()) return { success: false, error: "Not configured" };
+  const supabase = await createClient();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabase.from(table as any) as any).delete().eq("id", id);
   if (error) return { success: false, error: error.message };
   revalidatePath("/", "layout"); return { success: true };
 }

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   LogOut, MessageSquare, Calendar, Star, Utensils,
-  ImageIcon, Settings, LayoutDashboard, PartyPopper,
+  ImageIcon, Settings, LayoutDashboard, PartyPopper, Trash2,
 } from "lucide-react";
 import { signOutAdmin } from "@/lib/actions";
 import { InquiriesTab } from "./tabs/inquiries-tab";
@@ -15,9 +15,10 @@ import { GalleryTab } from "./tabs/gallery-tab";
 import { EventsTab } from "./tabs/events-tab";
 import { SettingsTab } from "./tabs/settings-tab";
 import { ReservationsTab } from "./tabs/reservations-tab";
+import { RecycleBinTab } from "./tabs/recycle-bin-tab";
 import { useState } from "react";
 
-type Tab = "reservations" | "inquiries" | "messages" | "testimonials" | "menu" | "gallery" | "events" | "settings";
+type Tab = "reservations" | "inquiries" | "messages" | "testimonials" | "menu" | "gallery" | "events" | "settings" | "recycle";
 
 interface AdminDashboardProps {
   inquiries: Array<Record<string, unknown>>;
@@ -26,17 +27,19 @@ interface AdminDashboardProps {
   menuCategories: Array<Record<string, unknown>>;
   menuItems: Array<Record<string, unknown>>;
   galleryImages: Array<Record<string, unknown>>;
+  galleryCategories: Array<Record<string, unknown>>;
   eventTypes: Array<Record<string, unknown>>;
   calendarEvents: Array<Record<string, unknown>>;
   settings: Record<string, unknown> | null;
   tableReservations: Array<Record<string, unknown>>;
   supabaseUrl?: string;
+  recycleBinItems: Array<Record<string, unknown>>;
 }
 
 export function AdminDashboard({
   inquiries, contacts, testimonials,
-  menuCategories, menuItems, galleryImages,
-  eventTypes, calendarEvents, settings, tableReservations, supabaseUrl,
+  menuCategories, menuItems, galleryImages, galleryCategories,
+  eventTypes, calendarEvents, settings, tableReservations, supabaseUrl, recycleBinItems,
 }: AdminDashboardProps) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<Tab>("reservations");
@@ -57,6 +60,7 @@ export function AdminDashboard({
     { id: "gallery", label: "Gallery", icon: <ImageIcon className="h-4 w-4" /> },
     { id: "events", label: "Events", icon: <PartyPopper className="h-4 w-4" /> },
     { id: "settings", label: "Settings", icon: <Settings className="h-4 w-4" /> },
+    { id: "recycle", label: "Recycle Bin", icon: <Trash2 className="h-4 w-4" />, badge: recycleBinItems.length || undefined },
   ];
 
   const titles: Record<Tab, string> = {
@@ -68,6 +72,7 @@ export function AdminDashboard({
     gallery: "Gallery",
     events: "Events",
     settings: "Site Settings",
+    recycle: "Recycle Bin",
   };
 
   return (
@@ -101,17 +106,19 @@ export function AdminDashboard({
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 px-2 py-4 space-y-1">
+        <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors relative ${activeTab === item.id ? "bg-orange-500 text-white" : "text-gray-400 hover:bg-white/10 hover:text-white"}`}
+              className={`w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors relative ${
+                activeTab === item.id ? "bg-orange-500 text-white" : "text-gray-400 hover:bg-white/10 hover:text-white"
+              } ${item.id === "recycle" ? "mt-2 border-t border-white/10 pt-4" : ""}`}
             >
               <span className="shrink-0">{item.icon}</span>
               {sidebarOpen && <span className="truncate">{item.label}</span>}
               {item.badge ? (
-                <span className="ml-auto flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1.5 text-xs font-bold text-white">
+                <span className={`ml-auto flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 text-xs font-bold text-white ${item.id === "recycle" ? "bg-gray-500" : "bg-red-500"}`}>
                   {item.badge}
                 </span>
               ) : null}
@@ -143,7 +150,6 @@ export function AdminDashboard({
               <p className="text-xs text-gray-400">Choma Zone Mtwapa Palms</p>
             </div>
           </div>
-          {/* Quick stats bar */}
           <div className="hidden md:flex items-center gap-6 text-center">
             <div><p className="text-lg font-bold text-gray-900">{inquiries.filter((i) => String(i.status) === "new").length}</p><p className="text-xs text-gray-400">New Inquiries</p></div>
             <div className="h-8 w-px bg-gray-200" />
@@ -160,9 +166,10 @@ export function AdminDashboard({
           {activeTab === "messages" && <ContactsTab contacts={contacts} />}
           {activeTab === "testimonials" && <TestimonialsTab testimonials={testimonials} />}
           {activeTab === "menu" && <MenuTab categories={menuCategories} menuItems={menuItems} />}
-          {activeTab === "gallery" && <GalleryTab galleryImages={galleryImages} supabaseUrl={supabaseUrl} />}
+          {activeTab === "gallery" && <GalleryTab galleryImages={galleryImages} galleryCategories={galleryCategories} supabaseUrl={supabaseUrl} />}
           {activeTab === "events" && <EventsTab eventTypes={eventTypes} calendarEvents={calendarEvents} />}
           {activeTab === "settings" && <SettingsTab settings={settings} galleryImages={galleryImages} supabaseUrl={supabaseUrl} />}
+          {activeTab === "recycle" && <RecycleBinTab items={recycleBinItems} />}
         </main>
       </div>
     </div>

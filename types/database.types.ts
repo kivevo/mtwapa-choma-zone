@@ -1,13 +1,11 @@
-export type GalleryCategory =
-  | "garden"
-  | "food_choma"
-  | "kids_playground"
-  | "choma_area"
-  | "coffee_shop"
-  | "parking"
-  | "signage"
-  | "bar_area"
-  | "events";
+export interface GalleryCategoryRow {
+  id: string;
+  name: string;
+  slug: string;
+  display_order: number;
+  created_at: string;
+  deleted_at?: string | null;
+}
 
 export interface SiteSettings {
   id: string;
@@ -38,6 +36,7 @@ export interface MenuCategory {
   slug: string;
   display_order: number;
   is_signature: boolean;
+  deleted_at?: string | null;
 }
 
 export interface MenuItem {
@@ -49,16 +48,19 @@ export interface MenuItem {
   image_url: string | null;
   is_available: boolean;
   display_order: number;
+  deleted_at?: string | null;
 }
 
 export interface GalleryImage {
   id: string;
-  category: GalleryCategory;
+  category: string;
   storage_path: string;
+  media_type?: "image" | "video";
   caption: string | null;
   display_order: number;
   is_visible: boolean;
   created_at: string;
+  deleted_at?: string | null;
 }
 
 export interface EventType {
@@ -68,6 +70,7 @@ export interface EventType {
   icon_name: string | null;
   image_url: string | null;
   display_order: number;
+  deleted_at?: string | null;
 }
 
 export interface EventInquiry {
@@ -81,6 +84,7 @@ export interface EventInquiry {
   message: string | null;
   status: "new" | "contacted" | "confirmed" | "completed" | "cancelled";
   created_at: string;
+  deleted_at?: string | null;
 }
 
 export interface ContactMessage {
@@ -91,6 +95,7 @@ export interface ContactMessage {
   message: string;
   is_read: boolean;
   created_at: string;
+  deleted_at?: string | null;
 }
 
 export interface Testimonial {
@@ -100,6 +105,7 @@ export interface Testimonial {
   comment: string;
   approved: boolean;
   created_at: string;
+  deleted_at?: string | null;
 }
 
 export interface CalendarEvent {
@@ -110,6 +116,7 @@ export interface CalendarEvent {
   event_date: string | null;
   is_recurring: boolean;
   created_at: string;
+  deleted_at?: string | null;
 }
 
 export interface MenuCategoryWithItems extends MenuCategory {

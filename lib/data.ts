@@ -10,6 +10,7 @@ import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import type {
   CalendarEvent,
   EventType,
+  GalleryCategoryRow,
   GalleryImage,
   MenuCategoryWithItems,
   SiteSettings,
@@ -18,25 +19,19 @@ import type {
 
 export async function getSiteSettings(): Promise<SiteSettings> {
   if (!isSupabaseConfigured()) return FALLBACK_SETTINGS;
-
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("site_settings")
-    .select("*")
-    .limit(1)
-    .single();
-
+  const { data, error } = await supabase.from("site_settings").select("*").limit(1).single();
   if (error || !data) return FALLBACK_SETTINGS;
   return data as SiteSettings;
 }
 
 export async function getMenuCategories(): Promise<MenuCategoryWithItems[]> {
   if (!isSupabaseConfigured()) return FALLBACK_MENU;
-
   const supabase = await createClient();
   const { data: categories, error: catError } = await supabase
     .from("menu_categories")
     .select("*")
+    .is("deleted_at", null)
     .order("display_order");
 
   if (catError || !categories?.length) return FALLBACK_MENU;
@@ -45,6 +40,7 @@ export async function getMenuCategories(): Promise<MenuCategoryWithItems[]> {
     .from("menu_items")
     .select("*")
     .eq("is_available", true)
+    .is("deleted_at", null)
     .order("display_order");
 
   if (itemError) return FALLBACK_MENU;
@@ -55,13 +51,20 @@ export async function getMenuCategories(): Promise<MenuCategoryWithItems[]> {
   })) as MenuCategoryWithItems[];
 }
 
-export async function getGalleryImages(
-  category?: string
-): Promise<GalleryImage[]> {
+export async function getGalleryCategories(): Promise<GalleryCategoryRow[]> {
+  if (!isSupabaseConfigured()) return [];
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("gallery_categories")
+    .select("*")
+    .is("deleted_at", null)
+    .order("display_order");
+  return (data ?? []) as GalleryCategoryRow[];
+}
+
+export async function getGalleryImages(category?: string): Promise<GalleryImage[]> {
   if (!isSupabaseConfigured()) {
-    if (category && category !== "all") {
-      return FALLBACK_GALLERY.filter((img) => img.category === category);
-    }
+    if (category && category !== "all") return FALLBACK_GALLERY.filter((img) => img.category === category);
     return FALLBACK_GALLERY;
   }
 
@@ -71,59 +74,52 @@ export async function getGalleryImages(
     .select("*")
     .eq("is_visible", true)
     .neq("category", "website_assets")
+    .is("deleted_at", null)
     .order("display_order");
 
-  if (category && category !== "all") {
-    query = query.eq("category", category);
-  }
+  if (category && category !== "all") query = query.eq("category", category);
 
   const { data, error } = await query;
   if (error || !data?.length) {
-    if (category && category !== "all") {
-      return FALLBACK_GALLERY.filter((img) => img.category === category);
-    }
+    if (category && category !== "all") return FALLBACK_GALLERY.filter((img) => img.category === category);
     return FALLBACK_GALLERY;
   }
-
   return data as GalleryImage[];
 }
 
 export async function getEventTypes(): Promise<EventType[]> {
   if (!isSupabaseConfigured()) return FALLBACK_EVENT_TYPES;
-
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("event_types")
     .select("*")
+    .is("deleted_at", null)
     .order("display_order");
-
   if (error || !data?.length) return FALLBACK_EVENT_TYPES;
   return data as EventType[];
 }
 
 export async function getTestimonials(): Promise<Testimonial[]> {
   if (!isSupabaseConfigured()) return FALLBACK_TESTIMONIALS;
-
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("testimonials")
     .select("*")
     .eq("approved", true)
+    .is("deleted_at", null)
     .order("created_at", { ascending: false });
-
   if (error || !data?.length) return FALLBACK_TESTIMONIALS;
   return data as Testimonial[];
 }
 
 export async function getCalendarEvents(): Promise<CalendarEvent[]> {
   if (!isSupabaseConfigured()) return FALLBACK_CALENDAR;
-
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("events_calendar")
     .select("*")
+    .is("deleted_at", null)
     .order("created_at");
-
   if (error || !data?.length) return FALLBACK_CALENDAR;
   return data as CalendarEvent[];
 }
