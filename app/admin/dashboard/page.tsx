@@ -21,9 +21,9 @@ export default async function AdminDashboardPage() {
     redirect("/admin");
   }
 
-  const cutoff = new Date();
-  cutoff.setDate(cutoff.getDate() - 30);
-
+  // NOTE: We intentionally do NOT filter by deleted_at in these admin queries.
+  // The deleted_at column may not yet exist (migrations pending), and admins
+  // need to see all data. Public site queries (lib/data.ts) handle filtering.
   const [
     { data: inquiries },
     { data: contacts },
@@ -36,50 +36,70 @@ export default async function AdminDashboardPage() {
     { data: settings },
     { data: tableReservations },
     { data: galleryCategories },
-    recycleBinItems,
   ] = await Promise.all([
-    supabase.from("event_inquiries").select("*, event_types(name)").is("deleted_at", null).order("created_at", { ascending: false }),
-    supabase.from("contact_messages").select("*").is("deleted_at", null).order("created_at", { ascending: false }),
-    supabase.from("testimonials").select("*").is("deleted_at", null).order("created_at", { ascending: false }),
-    supabase.from("menu_categories").select("*").is("deleted_at", null).order("display_order"),
-    supabase.from("menu_items").select("*, menu_categories(name)").is("deleted_at", null).order("display_order"),
-    supabase.from("gallery_images").select("*").is("deleted_at", null).order("display_order"),
-    supabase.from("event_types").select("*").is("deleted_at", null).order("display_order"),
-    supabase.from("events_calendar").select("*").is("deleted_at", null).order("created_at"),
+    supabase.from("event_inquiries").select("*, event_types(name)").order("created_at", { ascending: false }),
+    supabase.from("contact_messages").select("*").order("created_at", { ascending: false }),
+    supabase.from("testimonials").select("*").order("created_at", { ascending: false }),
+    supabase.from("menu_categories").select("*").order("display_order"),
+    supabase.from("menu_items").select("*, menu_categories(name)").order("display_order"),
+    supabase.from("gallery_images").select("*").order("display_order"),
+    supabase.from("event_types").select("*").order("display_order"),
+    supabase.from("events_calendar").select("*").order("created_at"),
     supabase.from("site_settings").select("*").limit(1).single(),
-    supabase.from("table_reservations").select("*").is("deleted_at", null).order("created_at", { ascending: false }),
-    supabase.from("gallery_categories").select("*").is("deleted_at", null).order("display_order"),
-    // Recycle bin: items soft-deleted in the past 30 days
-    Promise.all([
+    supabase.from("table_reservations").select("*").order("created_at", { ascending: false }),
+    // gallery_categories may not exist yet — silently fall back to empty
+    supabase.from("gallery_categories").select("*").order("display_order").then(
+      (res) => res,
+      () => ({ data: [] })
+    ),
+  ]);
+
+  // Recycle bin — only fetch if deleted_at column exists (after migration 009)
+  // We catch errors gracefully so the dashboard still loads before migrations are run.
+  let recycleBinItems: Array<Record<string, unknown>> = [];
+  try {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 30);
+
+    const [g, mi, mc, et, ce] = await Promise.all([
       supabase.from("gallery_images").select("id, caption, storage_path, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
       supabase.from("menu_items").select("id, name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
       supabase.from("menu_categories").select("id, name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
       supabase.from("event_types").select("id, name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
       supabase.from("events_calendar").select("id, title, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
-    ]).then(([gallery, mi, mc, et, ce]) => [
-      ...(gallery.data ?? []).map((r) => ({ ...r, table: "gallery_images", label: r.caption || r.storage_path })),
+    ]);
+
+    recycleBinItems = [
+      ...(g.data ?? []).map((r) => ({ ...r, table: "gallery_images", label: r.caption || r.storage_path })),
       ...(mi.data ?? []).map((r) => ({ ...r, table: "menu_items", label: r.name })),
       ...(mc.data ?? []).map((r) => ({ ...r, table: "menu_categories", label: r.name })),
       ...(et.data ?? []).map((r) => ({ ...r, table: "event_types", label: r.name })),
       ...(ce.data ?? []).map((r) => ({ ...r, table: "events_calendar", label: r.title })),
-    ].sort((a, b) => new Date(b.deleted_at!).getTime() - new Date(a.deleted_at!).getTime())),
-  ]);
+    ].sort((a, b) => new Date(b.deleted_at as string).getTime() - new Date(a.deleted_at as string).getTime());
+  } catch {
+    // Migration not yet applied — recycle bin is empty until then
+  }
+
+  // Also filter out already-soft-deleted items for admin view IF the column exists
+  const activeGalleryImages = (galleryImages ?? []).filter((img) => !img.deleted_at);
+  const activeMenuItems = (menuItems ?? []).filter((item) => !item.deleted_at);
+  const activeMenuCategories = (menuCategories ?? []).filter((cat) => !cat.deleted_at);
 
   return (
     <AdminDashboard
-      inquiries={inquiries ?? []}
-      contacts={contacts ?? []}
-      testimonials={testimonials ?? []}
-      menuCategories={menuCategories ?? []}
-      menuItems={menuItems ?? []}
-      galleryImages={galleryImages ?? []}
+      inquiries={(inquiries ?? []).filter((i) => !i.deleted_at)}
+      contacts={(contacts ?? []).filter((c) => !c.deleted_at)}
+      testimonials={(testimonials ?? []).filter((t) => !t.deleted_at)}
+      menuCategories={activeMenuCategories}
+      menuItems={activeMenuItems}
+      galleryImages={activeGalleryImages}
       galleryCategories={galleryCategories ?? []}
-      eventTypes={eventTypes ?? []}
-      calendarEvents={calendarEvents ?? []}
+      eventTypes={(eventTypes ?? []).filter((e) => !e.deleted_at)}
+      calendarEvents={(calendarEvents ?? []).filter((e) => !e.deleted_at)}
       settings={settings}
-      tableReservations={tableReservations ?? []}
+      tableReservations={(tableReservations ?? []).filter((r) => !r.deleted_at)}
       supabaseUrl={getSupabasePublicUrl()}
-      recycleBinItems={recycleBinItems ?? []}
+      recycleBinItems={recycleBinItems}
     />
   );
 }

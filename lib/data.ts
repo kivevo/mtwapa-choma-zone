@@ -31,7 +31,6 @@ export async function getMenuCategories(): Promise<MenuCategoryWithItems[]> {
   const { data: categories, error: catError } = await supabase
     .from("menu_categories")
     .select("*")
-    .is("deleted_at", null)
     .order("display_order");
 
   if (catError || !categories?.length) return FALLBACK_MENU;
@@ -40,26 +39,28 @@ export async function getMenuCategories(): Promise<MenuCategoryWithItems[]> {
     .from("menu_items")
     .select("*")
     .eq("is_available", true)
-    .is("deleted_at", null)
     .order("display_order");
 
   if (itemError) return FALLBACK_MENU;
 
-  return categories.map((cat) => ({
+  const activeCats = categories.filter((c) => !c.deleted_at);
+  const activeItems = (items ?? []).filter((item) => !item.deleted_at);
+
+  return activeCats.map((cat) => ({
     ...cat,
-    menu_items: (items ?? []).filter((item) => item.category_id === cat.id),
+    menu_items: activeItems.filter((item) => item.category_id === cat.id),
   })) as MenuCategoryWithItems[];
 }
 
 export async function getGalleryCategories(): Promise<GalleryCategoryRow[]> {
   if (!isSupabaseConfigured()) return [];
   const supabase = await createClient();
-  const { data } = await supabase
+  const { data, error: catErr } = await supabase
     .from("gallery_categories")
     .select("*")
-    .is("deleted_at", null)
     .order("display_order");
-  return (data ?? []) as GalleryCategoryRow[];
+  if (catErr) return [];
+  return ((data ?? []).filter((c) => !c.deleted_at)) as GalleryCategoryRow[];
 }
 
 export async function getGalleryImages(category?: string): Promise<GalleryImage[]> {
@@ -74,7 +75,6 @@ export async function getGalleryImages(category?: string): Promise<GalleryImage[
     .select("*")
     .eq("is_visible", true)
     .neq("category", "website_assets")
-    .is("deleted_at", null)
     .order("display_order");
 
   if (category && category !== "all") query = query.eq("category", category);
@@ -84,7 +84,9 @@ export async function getGalleryImages(category?: string): Promise<GalleryImage[
     if (category && category !== "all") return FALLBACK_GALLERY.filter((img) => img.category === category);
     return FALLBACK_GALLERY;
   }
-  return data as GalleryImage[];
+  // Filter soft-deleted in JS (resilient if column doesn't exist yet)
+  const active = data.filter((img) => !img.deleted_at);
+  return active as GalleryImage[];
 }
 
 export async function getEventTypes(): Promise<EventType[]> {
@@ -93,10 +95,9 @@ export async function getEventTypes(): Promise<EventType[]> {
   const { data, error } = await supabase
     .from("event_types")
     .select("*")
-    .is("deleted_at", null)
     .order("display_order");
   if (error || !data?.length) return FALLBACK_EVENT_TYPES;
-  return data as EventType[];
+  return data.filter((e) => !e.deleted_at) as EventType[];
 }
 
 export async function getTestimonials(): Promise<Testimonial[]> {
@@ -106,10 +107,9 @@ export async function getTestimonials(): Promise<Testimonial[]> {
     .from("testimonials")
     .select("*")
     .eq("approved", true)
-    .is("deleted_at", null)
     .order("created_at", { ascending: false });
   if (error || !data?.length) return FALLBACK_TESTIMONIALS;
-  return data as Testimonial[];
+  return data.filter((t) => !t.deleted_at) as Testimonial[];
 }
 
 export async function getCalendarEvents(): Promise<CalendarEvent[]> {
@@ -118,10 +118,9 @@ export async function getCalendarEvents(): Promise<CalendarEvent[]> {
   const { data, error } = await supabase
     .from("events_calendar")
     .select("*")
-    .is("deleted_at", null)
     .order("created_at");
   if (error || !data?.length) return FALLBACK_CALENDAR;
-  return data as CalendarEvent[];
+  return data.filter((e) => !e.deleted_at) as CalendarEvent[];
 }
 
 export function getSupabasePublicUrl(): string | undefined {
