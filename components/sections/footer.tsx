@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   MapPin,
@@ -26,9 +27,20 @@ export function Footer({ settings }: FooterProps) {
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <div className="mb-4 flex items-center gap-2">
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-ember font-display text-xl font-bold">
-                {settings.frontend_content?.logo_text || "CZ"}
-              </span>
+              {settings.frontend_content?.logo_image ? (
+                <div className="relative h-12 w-12 shrink-0">
+                  <Image
+                    src={settings.frontend_content.logo_image}
+                    alt={settings.frontend_content.logo_full_name || "Choma Zone"}
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              ) : (
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-ember font-display text-xl font-bold">
+                  {settings.frontend_content?.logo_text || "CZ"}
+                </span>
+              )}
               <div>
                 <p className="font-display text-lg font-bold">{settings.frontend_content?.logo_full_name || "Choma Zone"}</p>
                 <p className="text-sm text-gold">{settings.frontend_content?.logo_subtitle || "Mtwapa Palms"}</p>

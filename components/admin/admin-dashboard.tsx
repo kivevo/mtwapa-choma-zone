@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   LogOut, MessageSquare, Calendar, Star, Utensils,
@@ -75,9 +76,20 @@ export function AdminDashboard({
       <aside className={`${sidebarOpen ? "w-56" : "w-16"} flex-shrink-0 bg-gray-900 text-white flex flex-col transition-all duration-300`}>
         {/* Logo */}
         <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-500 text-white font-bold text-sm">
-            {(settings?.frontend_content as Record<string, string>)?.logo_text || "CZ"}
-          </div>
+          {(settings?.frontend_content as Record<string, string>)?.logo_image ? (
+            <div className="relative h-8 w-8 shrink-0 rounded-lg overflow-hidden bg-white/10">
+              <Image
+                src={(settings?.frontend_content as Record<string, string>).logo_image}
+                alt="Logo"
+                fill
+                className="object-contain p-0.5"
+              />
+            </div>
+          ) : (
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-500 text-white font-bold text-sm">
+              {(settings?.frontend_content as Record<string, string>)?.logo_text || "CZ"}
+            </div>
+          )}
           {sidebarOpen && (
             <div className="min-w-0">
               <p className="text-sm font-bold truncate">

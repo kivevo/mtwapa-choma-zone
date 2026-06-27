@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
@@ -34,10 +35,21 @@ export function AdminLoginClient({ settings }: { settings?: SiteSettings }) {
   return (
     <div className="w-full max-w-md rounded-2xl bg-sand p-8 shadow-xl">
       <div className="mb-8 text-center">
-        <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-ember font-display text-xl font-bold text-sand">
-          {settings?.frontend_content?.logo_text || "CZ"}
-        </span>
-        <h1 className="mt-4 font-display text-2xl font-bold text-charcoal">
+        {settings?.frontend_content?.logo_image ? (
+          <div className="relative mx-auto h-16 w-16 mb-4">
+            <Image
+              src={settings.frontend_content.logo_image}
+              alt="Logo"
+              fill
+              className="object-contain"
+            />
+          </div>
+        ) : (
+          <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-ember font-display text-xl font-bold text-sand mb-4">
+            {settings?.frontend_content?.logo_text || "CZ"}
+          </span>
+        )}
+        <h1 className="font-display text-2xl font-bold text-charcoal">
           Admin Login
         </h1>
         <p className="mt-2 text-sm text-charcoal/60">
