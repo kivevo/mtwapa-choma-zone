@@ -51,7 +51,7 @@ export function AdminDashboard({
   const navItems: { id: Tab; label: string; icon: React.ReactNode; badge?: number }[] = [
     { id: "reservations", label: "Reservations", icon: <LayoutDashboard className="h-4 w-4" />, badge: tableReservations.filter((r) => String(r.status) === "pending").length || undefined },
     { id: "inquiries", label: "Inquiries", icon: <Calendar className="h-4 w-4" />, badge: inquiries.filter((i) => String(i.status) === "new").length || undefined },
-    { id: "messages", label: "Messages", icon: <MessageSquare className="h-4 w-4" />, badge: contacts.length || undefined },
+    { id: "messages", label: "Messages", icon: <MessageSquare className="h-4 w-4" />, badge: contacts.filter((c) => !c.is_read).length || undefined },
     { id: "testimonials", label: "Testimonials", icon: <Star className="h-4 w-4" /> },
     { id: "menu", label: "Menu", icon: <Utensils className="h-4 w-4" /> },
     { id: "gallery", label: "Gallery", icon: <ImageIcon className="h-4 w-4" /> },

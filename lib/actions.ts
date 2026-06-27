@@ -159,6 +159,44 @@ export async function submitTestimonial(data: TestimonialInput) {
   revalidatePath("/", "layout"); return { success: true };
 }
 
+export async function markContactMessageRead(id: string) {
+  if (!isSupabaseConfigured()) return { success: false, error: "Not configured" };
+  const supabase = await createClient();
+  const { error } = await supabase.from("contact_messages").update({ is_read: true }).eq("id", id);
+  if (error) return { success: false, error: error.message };
+  revalidatePath("/", "layout"); return { success: true };
+}
+
+import { sendCustomerEmailReply } from "@/lib/email";
+
+export async function sendEmailReplyAction(messageId: string, to: string, subject: string, messageBody: string) {
+  if (!isSupabaseConfigured()) return { success: false, error: "Not configured" };
+  
+  const html = `
+    <div style="font-family: sans-serif; color: #333; line-height: 1.5;">
+      ${messageBody.split('\n').map(p => `<p>${p}</p>`).join('')}
+      <br />
+      <hr style="border: none; border-top: 1px solid #eee;" />
+      <p style="font-size: 0.85em; color: #888;">
+        Best regards,<br/>
+        <strong>The Team at Choma Zone Mtwapa Palms</strong><br/>
+        <a href="https://chomazonemtwapa.co.ke">chomazonemtwapa.co.ke</a>
+      </p>
+    </div>
+  `;
+
+  const result = await sendCustomerEmailReply({ to, subject, html });
+  
+  if (result.success) {
+    // Also mark the original message as read
+    const supabase = await createClient();
+    await supabase.from("contact_messages").update({ is_read: true }).eq("id", messageId);
+    revalidatePath("/", "layout");
+  }
+  
+  return result;
+}
+
 export async function submitReservation(data: ReservationInput) {
   const parsed = reservationSchema.safeParse(data);
   if (!parsed.success) {
