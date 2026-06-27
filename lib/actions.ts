@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import { sendAdminEmailNotification } from "@/lib/email";
 import {
@@ -20,12 +21,12 @@ export async function submitEventInquiry(data: EventInquiryInput) {
   }
 
   if (parsed.data.website) {
-    return { success: true };
+    revalidatePath("/", "layout"); return { success: true };
   }
 
   if (!isSupabaseConfigured()) {
     console.log("[Demo mode] Event inquiry:", parsed.data);
-    return { success: true };
+    revalidatePath("/", "layout"); return { success: true };
   }
 
   const supabase = await createClient();
@@ -63,7 +64,7 @@ export async function submitEventInquiry(data: EventInquiryInput) {
     `
   }).catch(e => console.error("Email notification failed:", e));
 
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function submitContactMessage(data: ContactMessageInput) {
@@ -73,12 +74,12 @@ export async function submitContactMessage(data: ContactMessageInput) {
   }
 
   if (parsed.data.website) {
-    return { success: true };
+    revalidatePath("/", "layout"); return { success: true };
   }
 
   if (!isSupabaseConfigured()) {
     console.log("[Demo mode] Contact message:", parsed.data);
-    return { success: true };
+    revalidatePath("/", "layout"); return { success: true };
   }
 
   const supabase = await createClient();
@@ -109,7 +110,7 @@ export async function submitContactMessage(data: ContactMessageInput) {
     `
   }).catch(e => console.error("Email notification failed:", e));
 
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function submitTestimonial(data: TestimonialInput) {
@@ -119,12 +120,12 @@ export async function submitTestimonial(data: TestimonialInput) {
   }
 
   if (parsed.data.website) {
-    return { success: true };
+    revalidatePath("/", "layout"); return { success: true };
   }
 
   if (!isSupabaseConfigured()) {
     console.log("[Demo mode] Testimonial:", parsed.data);
-    return { success: true };
+    revalidatePath("/", "layout"); return { success: true };
   }
 
   const supabase = await createClient();
@@ -155,7 +156,7 @@ export async function submitTestimonial(data: TestimonialInput) {
     `
   }).catch(e => console.error("Email notification failed:", e));
 
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function submitReservation(data: ReservationInput) {
@@ -165,12 +166,12 @@ export async function submitReservation(data: ReservationInput) {
   }
 
   if (parsed.data.website) {
-    return { success: true };
+    revalidatePath("/", "layout"); return { success: true };
   }
 
   if (!isSupabaseConfigured()) {
     console.log("[Demo mode] Reservation:", parsed.data);
-    return { success: true };
+    revalidatePath("/", "layout"); return { success: true };
   }
 
   const supabase = await createClient();
@@ -208,7 +209,7 @@ export async function submitReservation(data: ReservationInput) {
     `
   }).catch(e => console.error("Email notification failed:", e));
 
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function updateReservationStatus(id: string, status: string) {
@@ -221,7 +222,7 @@ export async function updateReservationStatus(id: string, status: string) {
     .eq("id", id);
 
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function updateInquiryStatus(id: string, status: string) {
@@ -234,7 +235,7 @@ export async function updateInquiryStatus(id: string, status: string) {
     .eq("id", id);
 
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function toggleTestimonialApproval(id: string, approved: boolean) {
@@ -247,7 +248,7 @@ export async function toggleTestimonialApproval(id: string, approved: boolean) {
     .eq("id", id);
 
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function deleteGalleryImage(id: string) {
@@ -257,7 +258,7 @@ export async function deleteGalleryImage(id: string) {
   const { error } = await supabase.from("gallery_images").delete().eq("id", id);
 
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function toggleMenuItemAvailability(id: string, isAvailable: boolean) {
@@ -270,7 +271,7 @@ export async function toggleMenuItemAvailability(id: string, isAvailable: boolea
     .eq("id", id);
 
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function updateSiteSettings(data: Partial<{
@@ -310,7 +311,8 @@ export async function updateSiteSettings(data: Partial<{
     .eq("id", settings.id);
 
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout");
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 // ── MENU CATEGORIES ──────────────────────────────────────────────
@@ -321,7 +323,7 @@ export async function createMenuCategory(data: {
   const supabase = await createClient();
   const { error } = await supabase.from("menu_categories").insert(data);
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function updateMenuCategory(id: string, data: {
@@ -331,7 +333,7 @@ export async function updateMenuCategory(id: string, data: {
   const supabase = await createClient();
   const { error } = await supabase.from("menu_categories").update(data).eq("id", id);
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function deleteMenuCategory(id: string) {
@@ -339,7 +341,7 @@ export async function deleteMenuCategory(id: string) {
   const supabase = await createClient();
   const { error } = await supabase.from("menu_categories").delete().eq("id", id);
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 // ── MENU ITEMS ───────────────────────────────────────────────────
@@ -351,7 +353,7 @@ export async function createMenuItem(data: {
   const supabase = await createClient();
   const { error } = await supabase.from("menu_items").insert(data);
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function updateMenuItem(id: string, data: {
@@ -362,7 +364,7 @@ export async function updateMenuItem(id: string, data: {
   const supabase = await createClient();
   const { error } = await supabase.from("menu_items").update(data).eq("id", id);
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function deleteMenuItem(id: string) {
@@ -370,7 +372,7 @@ export async function deleteMenuItem(id: string) {
   const supabase = await createClient();
   const { error } = await supabase.from("menu_items").delete().eq("id", id);
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 // ── GALLERY ──────────────────────────────────────────────────────
@@ -381,7 +383,7 @@ export async function createGalleryImage(data: {
   const supabase = await createClient();
   const { error } = await supabase.from("gallery_images").insert(data);
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function updateGalleryImage(id: string, data: {
@@ -391,7 +393,7 @@ export async function updateGalleryImage(id: string, data: {
   const supabase = await createClient();
   const { error } = await supabase.from("gallery_images").update(data).eq("id", id);
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 // ── EVENT TYPES ───────────────────────────────────────────────────
@@ -402,7 +404,7 @@ export async function createEventType(data: {
   const supabase = await createClient();
   const { error } = await supabase.from("event_types").insert(data);
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function updateEventType(id: string, data: {
@@ -412,7 +414,7 @@ export async function updateEventType(id: string, data: {
   const supabase = await createClient();
   const { error } = await supabase.from("event_types").update(data).eq("id", id);
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function deleteEventType(id: string) {
@@ -420,7 +422,7 @@ export async function deleteEventType(id: string) {
   const supabase = await createClient();
   const { error } = await supabase.from("event_types").delete().eq("id", id);
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 // ── CALENDAR EVENTS ───────────────────────────────────────────────
@@ -432,7 +434,7 @@ export async function createCalendarEvent(data: {
   const supabase = await createClient();
   const { error } = await supabase.from("events_calendar").insert(data);
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function updateCalendarEvent(id: string, data: {
@@ -443,7 +445,7 @@ export async function updateCalendarEvent(id: string, data: {
   const supabase = await createClient();
   const { error } = await supabase.from("events_calendar").update(data).eq("id", id);
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function deleteCalendarEvent(id: string) {
@@ -451,7 +453,7 @@ export async function deleteCalendarEvent(id: string) {
   const supabase = await createClient();
   const { error } = await supabase.from("events_calendar").delete().eq("id", id);
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 // ── TESTIMONIALS ──────────────────────────────────────────────────
@@ -462,7 +464,7 @@ export async function createTestimonial(data: {
   const supabase = await createClient();
   const { error } = await supabase.from("testimonials").insert(data);
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function deleteTestimonial(id: string) {
@@ -470,7 +472,7 @@ export async function deleteTestimonial(id: string) {
   const supabase = await createClient();
   const { error } = await supabase.from("testimonials").delete().eq("id", id);
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function signInAdmin(email: string, password: string) {
@@ -482,11 +484,11 @@ export async function signInAdmin(email: string, password: string) {
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) return { success: false, error: error.message };
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
 
 export async function signOutAdmin() {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  return { success: true };
+  revalidatePath("/", "layout"); return { success: true };
 }
