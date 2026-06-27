@@ -50,6 +50,7 @@ export function SettingsTab({
   });
 
   const [content, setContent] = useState({
+    logo_image: fc.logo_image ?? "",
     logo_text: fc.logo_text ?? "CZ",
     logo_full_name: fc.logo_full_name ?? "Choma Zone",
     logo_subtitle: fc.logo_subtitle ?? "Mtwapa Palms",
@@ -57,7 +58,7 @@ export function SettingsTab({
     hero_title_highlight: fc.hero_title_highlight ?? "Nyama Choma",
     hero_title_suffix: fc.hero_title_suffix ?? "Open Garden Hospitality",
     hero_description: fc.hero_description ?? "Charcoal-grilled perfection in a lush makuti garden on the Mombasa–Malindi Highway. Sundowners, family fun, events & the coast's favourite stopover spot.",
-    hero_bg_image: fc.hero_bg_image ?? "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&q=80",
+    hero_bg_image: fc.hero_bg_image ?? "/hero-bg-kenyan.png",
     hero_bg_video: fc.hero_bg_video ?? "",
     about_title: fc.about_title ?? "More Than Just a Restaurant",
     about_p1: fc.about_p1 ?? "Since opening our doors, Choma Zone Mtwapa Palms has become the coast's premier destination for authentic charcoal-grilled meats and unforgettable open-air dining.",
@@ -125,7 +126,7 @@ export function SettingsTab({
           Library
         </button>
       </div>
-      {currentVal && currentVal.startsWith("http") && (
+      {currentVal && (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={currentVal} alt={label} className="mt-2 h-20 w-auto rounded-lg object-cover border" />
       )}
