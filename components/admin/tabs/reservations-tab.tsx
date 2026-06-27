@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Check, X, Calendar, Clock, Users, Phone, Mail, FileText, Trash2, CheckCircle2 } from "lucide-react";
+import { Check, X, Calendar, Clock, Users, Phone, Mail, FileText, Trash2, CheckCircle2, MessageCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { updateReservationStatus } from "@/lib/actions";
 
@@ -69,16 +69,22 @@ export function ReservationsTab({ reservations }: { reservations: Array<Record<s
             </div>
           </div>
 
-          <div className="mt-3 flex flex-wrap gap-4 text-sm text-gray-600">
-            <div className="flex items-center gap-1.5">
-              <Phone className="h-4 w-4" />
-              <a href={`tel:${String(res.phone)}`} className="hover:text-blue-600 hover:underline">{String(res.phone)}</a>
-            </div>
+          <div className="mt-3 flex flex-wrap gap-3">
+            <a
+              href={`https://wa.me/${String(res.phone).replace(/\D/g, "")}?text=${encodeURIComponent(`Hi ${String(res.guest_name)}, regarding your table reservation at Choma Zone for ${String(res.reservation_date)}: `)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 rounded-lg bg-green-50 px-3 py-1.5 text-sm font-medium text-green-700 hover:bg-green-100 transition-colors"
+            >
+              <MessageCircle className="h-4 w-4" /> Reply via WhatsApp
+            </a>
             {!!res.email && (
-              <div className="flex items-center gap-1.5">
-                <Mail className="h-4 w-4" />
-                <a href={`mailto:${String(res.email)}`} className="hover:text-blue-600 hover:underline">{String(res.email)}</a>
-              </div>
+              <a
+                href={`mailto:${String(res.email)}?subject=Re: Your Table Reservation at Choma Zone`}
+                className="flex items-center gap-1.5 rounded-lg bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700 hover:bg-blue-100 transition-colors"
+              >
+                <Mail className="h-4 w-4" /> Reply via Email
+              </a>
             )}
           </div>
 

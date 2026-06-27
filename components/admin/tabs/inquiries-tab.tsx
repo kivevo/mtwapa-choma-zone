@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { MessageCircle, Mail } from "lucide-react";
 import { updateInquiryStatus } from "@/lib/actions";
 
 export function InquiriesTab({ inquiries }: { inquiries: Array<Record<string, unknown>> }) {
@@ -50,8 +51,28 @@ export function InquiriesTab({ inquiries }: { inquiries: Array<Record<string, un
                   <p className="mt-2 text-sm text-gray-500 italic">&#34;{String(inq.message)}&#34;</p>
                 )}
                 <p className="mt-1 text-xs text-gray-400">
-                  {new Date(String(inq.created_at)).toLocaleDateString("en-KE", { dateStyle: "medium" })}
+                  {new Date(String(inq.created_at)).toLocaleDateString("en-KE", { dateStyle: "medium", timeStyle: "short" })}
                 </p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  {!!inq.phone && (
+                    <a
+                      href={`https://wa.me/${String(inq.phone).replace(/\D/g, "")}?text=${encodeURIComponent(`Hi ${String(inq.full_name)}, regarding your event inquiry at Choma Zone: `)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 rounded-lg bg-green-50 px-3 py-1.5 text-sm font-medium text-green-700 hover:bg-green-100 transition-colors"
+                    >
+                      <MessageCircle className="h-4 w-4" /> Reply via WhatsApp
+                    </a>
+                  )}
+                  {!!inq.email && (
+                    <a
+                      href={`mailto:${String(inq.email)}?subject=Re: Your Event Inquiry at Choma Zone`}
+                      className="flex items-center gap-1.5 rounded-lg bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700 hover:bg-blue-100 transition-colors"
+                    >
+                      <Mail className="h-4 w-4" /> Reply via Email
+                    </a>
+                  )}
+                </div>
               </div>
               <select
                 value={String(inq.status)}

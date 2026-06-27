@@ -1,5 +1,7 @@
 "use client";
 
+import { MessageCircle, Mail } from "lucide-react";
+
 export function ContactsTab({ contacts }: { contacts: Array<Record<string, unknown>> }) {
   return (
     <div className="space-y-4">
@@ -19,8 +21,28 @@ export function ContactsTab({ contacts }: { contacts: Array<Record<string, unkno
                 </p>
                 <p className="mt-2 text-sm text-gray-700">{String(msg.message)}</p>
                 <p className="mt-2 text-xs text-gray-400">
-                  {new Date(String(msg.created_at)).toLocaleDateString("en-KE", { dateStyle: "medium" })}
+                  {new Date(String(msg.created_at)).toLocaleDateString("en-KE", { dateStyle: "medium", timeStyle: "short" })}
                 </p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  {!!msg.phone && (
+                    <a
+                      href={`https://wa.me/${String(msg.phone).replace(/\D/g, "")}?text=${encodeURIComponent(`Hi ${String(msg.full_name)}, we received your message: `)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 rounded-lg bg-green-50 px-3 py-1.5 text-sm font-medium text-green-700 hover:bg-green-100 transition-colors"
+                    >
+                      <MessageCircle className="h-4 w-4" /> Reply via WhatsApp
+                    </a>
+                  )}
+                  {!!msg.email && (
+                    <a
+                      href={`mailto:${String(msg.email)}?subject=Re: Your message to Choma Zone`}
+                      className="flex items-center gap-1.5 rounded-lg bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700 hover:bg-blue-100 transition-colors"
+                    >
+                      <Mail className="h-4 w-4" /> Reply via Email
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           </div>
