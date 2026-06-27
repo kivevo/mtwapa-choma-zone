@@ -51,7 +51,7 @@ export function InquiriesTab({ inquiries }: { inquiries: Array<Record<string, un
                   <p className="mt-2 text-sm text-gray-500 italic">&#34;{String(inq.message)}&#34;</p>
                 )}
                 <p className="mt-1 text-xs text-gray-400">
-                  {new Date(String(inq.created_at)).toLocaleDateString("en-KE", { dateStyle: "medium", timeStyle: "short" })}
+                  {new Date(String(inq.created_at)).toLocaleString("en-KE", { dateStyle: "medium", timeStyle: "short" })}
                 </p>
                 <div className="mt-4 flex flex-wrap gap-3">
                   {!!inq.phone && (

@@ -21,7 +21,7 @@ export function ContactsTab({ contacts }: { contacts: Array<Record<string, unkno
                 </p>
                 <p className="mt-2 text-sm text-gray-700">{String(msg.message)}</p>
                 <p className="mt-2 text-xs text-gray-400">
-                  {new Date(String(msg.created_at)).toLocaleDateString("en-KE", { dateStyle: "medium", timeStyle: "short" })}
+                  {new Date(String(msg.created_at)).toLocaleString("en-KE", { dateStyle: "medium", timeStyle: "short" })}
                 </p>
                 <div className="mt-4 flex flex-wrap gap-3">
                   {!!msg.phone && (
