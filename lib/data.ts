@@ -69,6 +69,8 @@ export async function getGalleryImages(
   let query = supabase
     .from("gallery_images")
     .select("*")
+    .eq("is_visible", true)
+    .neq("category", "website_assets")
     .order("display_order");
 
   if (category && category !== "all") {

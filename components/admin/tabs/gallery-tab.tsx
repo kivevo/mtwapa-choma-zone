@@ -3,8 +3,8 @@
 import { useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Pencil, Trash2, Check, X, Upload, Image as ImageIcon, Loader2, RefreshCw } from "lucide-react";
-import { createGalleryImage, updateGalleryImage, deleteGalleryImage } from "@/lib/actions";
+import { Pencil, Trash2, Check, X, Upload, Image as ImageIcon, Loader2, RefreshCw, Eye, EyeOff } from "lucide-react";
+import { createGalleryImage, updateGalleryImage, deleteGalleryImage, toggleGalleryImageVisibility } from "@/lib/actions";
 import { createClient } from "@/lib/supabase/client";
 import { ImagePicker } from "@/components/admin/image-picker";
 
@@ -441,6 +441,14 @@ export function GalleryTab({
                     Asset
                   </div>
                 )}
+                {/* Visibility badge */}
+                {!isWebsiteAsset && (
+                  <div className={`absolute top-2 left-2 rounded-full px-2 py-0.5 text-xs font-medium ${
+                    img.is_visible === false ? "bg-gray-700/80 text-gray-200" : "bg-green-600/80 text-white"
+                  }`}>
+                    {img.is_visible === false ? "Hidden" : "Visible"}
+                  </div>
+                )}
               </div>
 
               {/* Details */}
@@ -456,6 +464,28 @@ export function GalleryTab({
                     <p className="text-xs text-gray-400 truncate">{String(img.storage_path)}</p>
                   </div>
                   <div className="flex gap-1 shrink-0">
+                    {!isWebsiteAsset && (
+                      <button
+                        onClick={async () => {
+                          const newVal = img.is_visible === false ? true : false;
+                          const result = await toggleGalleryImageVisibility(String(img.id), newVal);
+                          if (result.success) {
+                            toast.success(newVal ? "Image is now visible on website" : "Image hidden from website");
+                            router.refresh();
+                          } else toast.error(result.error);
+                        }}
+                        className={`rounded-lg p-1.5 transition-colors ${
+                          img.is_visible === false
+                            ? "hover:bg-green-100 text-gray-400"
+                            : "hover:bg-gray-100 text-green-600"
+                        }`}
+                        title={img.is_visible === false ? "Show on website" : "Hide from website"}
+                      >
+                        {img.is_visible === false
+                          ? <EyeOff className="h-3.5 w-3.5" />
+                          : <Eye className="h-3.5 w-3.5" />}
+                      </button>
+                    )}
                     <button
                       onClick={() => {
                         setEditItem(img);

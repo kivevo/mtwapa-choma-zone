@@ -387,11 +387,19 @@ export async function createGalleryImage(data: {
 }
 
 export async function updateGalleryImage(id: string, data: {
-  category: string; caption: string; display_order: number; storage_path?: string;
+  category: string; caption: string; display_order: number; storage_path?: string; is_visible?: boolean;
 }) {
   if (!isSupabaseConfigured()) return { success: false, error: "Not configured" };
   const supabase = await createClient();
   const { error } = await supabase.from("gallery_images").update(data).eq("id", id);
+  if (error) return { success: false, error: error.message };
+  revalidatePath("/", "layout"); return { success: true };
+}
+
+export async function toggleGalleryImageVisibility(id: string, is_visible: boolean) {
+  if (!isSupabaseConfigured()) return { success: false, error: "Not configured" };
+  const supabase = await createClient();
+  const { error } = await supabase.from("gallery_images").update({ is_visible }).eq("id", id);
   if (error) return { success: false, error: error.message };
   revalidatePath("/", "layout"); return { success: true };
 }
