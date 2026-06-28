@@ -7,6 +7,7 @@ import { MapPin, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ContactButtons } from "@/components/contact-buttons";
 import { ReservationModal } from "@/components/sections/reservation-modal";
+import { resolveImageUrl } from "@/lib/utils";
 import type { SiteSettings } from "@/types/database.types";
 
 interface HeroProps {
@@ -32,7 +33,7 @@ export function Hero({ settings }: HeroProps) {
             playsInline
             className="absolute inset-0 h-full w-full object-cover"
           >
-            <source src={settings.frontend_content.hero_bg_video} type="video/mp4" />
+            <source src={resolveImageUrl(settings.frontend_content.hero_bg_video)} type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-gradient-to-b from-charcoal/55 via-charcoal/75 to-charcoal/95" />
         </>
@@ -41,7 +42,7 @@ export function Hero({ settings }: HeroProps) {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage:
-              `linear-gradient(to bottom, rgba(28,26,23,0.55) 0%, rgba(28,26,23,0.75) 50%, rgba(28,26,23,0.95) 100%), url('${settings.frontend_content?.hero_bg_image || "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&q=80"}')`,
+              `linear-gradient(to bottom, rgba(28,26,23,0.55) 0%, rgba(28,26,23,0.75) 50%, rgba(28,26,23,0.95) 100%), url('${resolveImageUrl(settings.frontend_content?.hero_bg_image) || "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&q=80"}')`,
           }}
         />
       )}

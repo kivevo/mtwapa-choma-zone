@@ -5,6 +5,32 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function resolveImageUrl(url: string | null | undefined, supabaseUrl?: string): string {
+  if (!url) return "";
+  const envUrl = supabaseUrl || process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+
+  // If url contains localhost or 127.0.0.1 (saved from dev environment), replace with production Supabase URL
+  if ((url.includes("localhost") || url.includes("127.0.0.1")) && envUrl) {
+    const parts = url.split("/storage/v1/object/public/");
+    if (parts.length > 1) {
+      return `${envUrl}/storage/v1/object/public/${parts[1]}`;
+    }
+  }
+
+  // If it's already a valid external HTTP/HTTPS URL or static root asset (/...), return as is
+  if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("/")) {
+    return url;
+  }
+
+  // If it's a relative storage path, construct full Supabase public storage URL
+  if (envUrl) {
+    const cleanPath = url.startsWith("gallery/") ? url : `gallery/${url}`;
+    return `${envUrl}/storage/v1/object/public/${cleanPath}`;
+  }
+
+  return url;
+}
+
 export function formatKES(amount: number | null | undefined): string {
   if (amount == null) return "";
   return `KES ${amount.toLocaleString("en-KE")}`;

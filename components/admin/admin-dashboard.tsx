@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   LogOut, MessageSquare, Calendar, Star, Utensils,
   ImageIcon, Settings, LayoutDashboard, PartyPopper, Trash2,
 } from "lucide-react";
+import { resolveImageUrl } from "@/lib/utils";
 import { signOutAdmin } from "@/lib/actions";
 import { InquiriesTab } from "./tabs/inquiries-tab";
 import { ContactsTab } from "./tabs/contacts-tab";
@@ -83,11 +83,11 @@ export function AdminDashboard({
         <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10">
           {(settings?.frontend_content as Record<string, string>)?.logo_image ? (
             <div className="relative h-8 w-8 shrink-0 rounded-lg overflow-hidden bg-white/10">
-              <Image
-                src={(settings?.frontend_content as Record<string, string>).logo_image}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={resolveImageUrl((settings?.frontend_content as Record<string, string>).logo_image)}
                 alt="Logo"
-                fill
-                className="object-contain p-0.5"
+                className="h-full w-full object-contain p-0.5"
               />
             </div>
           ) : (

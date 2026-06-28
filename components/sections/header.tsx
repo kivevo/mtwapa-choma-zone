@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X, Phone, MessageCircle, CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn, NAV_LINKS, WHATSAPP_URL } from "@/lib/utils";
+import { cn, NAV_LINKS, WHATSAPP_URL, resolveImageUrl } from "@/lib/utils";
 import { formatPhoneDisplay, formatPhoneForTel } from "@/lib/utils";
 import { ReservationModal } from "@/components/sections/reservation-modal";
 import type { SiteSettings } from "@/types/database.types";
@@ -39,7 +39,7 @@ export function Header({ settings }: HeaderProps) {
             {settings.frontend_content?.logo_image ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={settings.frontend_content.logo_image}
+                src={resolveImageUrl(settings.frontend_content.logo_image)}
                 alt={settings.frontend_content.logo_full_name || "Choma Zone"}
                 className="h-10 w-auto max-w-[120px] object-contain"
               />

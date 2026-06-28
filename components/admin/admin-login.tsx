@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { resolveImageUrl } from "@/lib/utils";
 import { signInAdmin } from "@/lib/actions";
 import type { SiteSettings } from "@/types/database.types";
 
@@ -37,11 +37,11 @@ export function AdminLoginClient({ settings }: { settings?: SiteSettings }) {
       <div className="mb-8 text-center">
         {settings?.frontend_content?.logo_image ? (
           <div className="relative mx-auto h-16 w-16 mb-4">
-            <Image
-              src={settings.frontend_content.logo_image}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={resolveImageUrl(settings.frontend_content.logo_image)}
               alt="Logo"
-              fill
-              className="object-contain"
+              className="h-full w-full object-contain"
             />
           </div>
         ) : (

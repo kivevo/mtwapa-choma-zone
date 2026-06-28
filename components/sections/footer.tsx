@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   MapPin,
@@ -11,7 +10,7 @@ import {
   FacebookIcon,
   TikTokIcon,
 } from "@/components/icons/social-icons";
-import { formatPhoneDisplay, formatPhoneForTel, WHATSAPP_URL } from "@/lib/utils";
+import { formatPhoneDisplay, formatPhoneForTel, WHATSAPP_URL, resolveImageUrl } from "@/lib/utils";
 import type { SiteSettings } from "@/types/database.types";
 
 interface FooterProps {
@@ -28,14 +27,12 @@ export function Footer({ settings }: FooterProps) {
           <div>
             <div className="mb-4 flex items-center gap-2">
               {settings.frontend_content?.logo_image ? (
-                <div className="relative h-12 w-12 shrink-0">
-                  <Image
-                    src={settings.frontend_content.logo_image}
-                    alt={settings.frontend_content.logo_full_name || "Choma Zone"}
-                    fill
-                    className="object-contain"
-                  />
-                </div>
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={resolveImageUrl(settings.frontend_content.logo_image)}
+                  alt={settings.frontend_content.logo_full_name || "Choma Zone"}
+                  className="h-12 w-auto max-w-[120px] object-contain"
+                />
               ) : (
                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-ember font-display text-xl font-bold">
                   {settings.frontend_content?.logo_text || "CZ"}
