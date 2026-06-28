@@ -408,6 +408,7 @@ export const FALLBACK_GALLERY: GalleryImage[] = (
   category,
   storage_path: url,
   caption: `${category.replace(/_/g, " ")} at Choma Zone Mtwapa Palms`,
+  description: null,
   display_order: i,
   is_visible: true,
   created_at: new Date().toISOString(),
