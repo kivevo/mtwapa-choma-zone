@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Check, ImageIcon } from "lucide-react";
+import { Check, ImageIcon, Film } from "lucide-react";
 import { updateSiteSettings } from "@/lib/actions";
 import { ImagePicker } from "@/components/admin/image-picker";
 
@@ -135,7 +135,7 @@ export function SettingsTab({
 
   return (
     <div className="max-w-2xl space-y-5">
-      {/* Image picker modal */}
+      {/* Image / Video picker modal */}
       <ImagePicker
         open={!!pickerTarget}
         onClose={() => setPickerTarget(null)}
@@ -144,6 +144,7 @@ export function SettingsTab({
         }}
         supabaseUrl={supabaseUrl ?? ""}
         images={galleryImages}
+        mediaType={pickerTarget === "hero_bg_video" ? "video" : "image"}
       />
 
       <div className="flex rounded-xl border bg-gray-50 p-1 gap-1 w-fit flex-wrap">
@@ -200,13 +201,26 @@ export function SettingsTab({
                 {imgField("Background Image", "hero_bg_image", content.hero_bg_image)}
                 <div>
                   <label className={labelCls}>Hero Background Video URL (optional MP4 link - overrides image)</label>
-                  <input
-                    type="url"
-                    value={content.hero_bg_video}
-                    onChange={(e) => setContent({ ...content, hero_bg_video: e.target.value })}
-                    className={inputCls}
-                    placeholder="https://example.com/video.mp4"
-                  />
+                  <div className="mt-1 flex gap-2">
+                    <input
+                      type="url"
+                      value={content.hero_bg_video}
+                      onChange={(e) => setContent({ ...content, hero_bg_video: e.target.value })}
+                      className="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition"
+                      placeholder="https://example.com/video.mp4"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setPickerTarget("hero_bg_video")}
+                      className="flex items-center gap-1.5 rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-600 hover:bg-orange-50 hover:border-orange-300 transition-colors whitespace-nowrap"
+                    >
+                      <Film className="h-4 w-4 text-orange-400" />
+                      Library
+                    </button>
+                  </div>
+                  {content.hero_bg_video && (
+                    <video src={content.hero_bg_video} className="mt-2 h-20 w-auto rounded-lg object-cover border" muted />
+                  )}
                 </div>
               </div>
             </div>
