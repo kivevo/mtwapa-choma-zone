@@ -69,11 +69,11 @@ export function Hero({ settings }: HeroProps) {
             {settings.frontend_content?.hero_description || "Charcoal-grilled perfection in a lush makuti garden on the Mombasa–Malindi Highway. Sundowners, family fun, events & the coast's favourite stopover spot."}
           </p>
 
-          <div className="mt-8 flex flex-col items-stretch justify-center gap-3 xs:flex-row xs:items-center sm:mt-10 sm:gap-4">
-            <Button onClick={() => setShowReservation(true)} size="lg" className="bg-ember hover:bg-ember/90 text-white font-semibold w-full xs:w-auto">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5 sm:mt-10 sm:gap-4">
+            <Button onClick={() => setShowReservation(true)} size="lg" className="bg-ember hover:bg-ember/90 text-white font-semibold shadow-md px-6">
               Book a Table
             </Button>
-            <Button asChild variant="outline" size="lg" className="text-sand border-sand/40 hover:bg-white/10 hover:text-white w-full xs:w-auto">
+            <Button asChild variant="outline" size="lg" className="text-sand border-sand/40 hover:bg-white/10 hover:text-white px-6">
               <Link href="/#menu">View Menu</Link>
             </Button>
           </div>

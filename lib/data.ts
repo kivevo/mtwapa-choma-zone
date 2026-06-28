@@ -85,14 +85,7 @@ export async function getGalleryImages(category?: string): Promise<GalleryImage[
     return FALLBACK_GALLERY;
   }
   // Filter soft-deleted in JS (resilient if column doesn't exist yet)
-  let active = data.filter((img) => !img.deleted_at);
-
-  // Filter out images that belong to soft-deleted categories
-  const categories = await getGalleryCategories();
-  if (categories.length > 0) {
-    const activeCategorySlugs = new Set(categories.map((c) => c.slug));
-    active = active.filter((img) => activeCategorySlugs.has(img.category));
-  }
+  const active = data.filter((img) => !img.deleted_at);
 
   return active as GalleryImage[];
 }
