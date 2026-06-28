@@ -3,8 +3,10 @@ import {
   getGalleryImages,
   getSiteSettings,
   getSupabasePublicUrl,
+  getGalleryCategories,
 } from "@/lib/data";
 import { GallerySection } from "@/components/sections/gallery-section";
+import { VideoShowcase } from "@/components/sections/video-showcase";
 
 export const metadata: Metadata = {
   title: "Gallery",
@@ -13,19 +15,24 @@ export const metadata: Metadata = {
 };
 
 export default async function GalleryPage() {
-  const [images, settings] = await Promise.all([
+  const [images, settings, categories] = await Promise.all([
     getGalleryImages(),
     getSiteSettings(),
+    getGalleryCategories(),
   ]);
   const supabaseUrl = getSupabasePublicUrl();
+  const photos = images.filter((img) => img.media_type !== "video");
+  const videos = images.filter((img) => img.media_type === "video");
 
   return (
     <div className="pt-24">
       <GallerySection
-        images={images}
+        images={photos}
+        categories={categories}
         supabaseUrl={supabaseUrl}
         settings={settings}
       />
+      <VideoShowcase videos={videos} supabaseUrl={supabaseUrl} />
     </div>
   );
 }

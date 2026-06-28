@@ -4,11 +4,12 @@ import { useState, useRef, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
-  Eye, EyeOff, Trash2, Upload, FolderPlus, X, Film, ImageIcon, Tag,
+  Eye, EyeOff, Trash2, Upload, FolderPlus, X, Film, ImageIcon, Tag, Pencil, Check,
 } from "lucide-react";
 import {
   createGalleryImage, deleteGalleryImage,
   toggleGalleryImageVisibility, createGalleryCategory, deleteGalleryCategory,
+  updateGalleryMedia,
 } from "@/lib/actions";
 import { createClient } from "@/lib/supabase/client";
 import { useConfirmDialog } from "@/components/admin/confirm-dialog";
@@ -35,6 +36,12 @@ export function GalleryTab({ galleryImages, galleryCategories, supabaseUrl }: Ga
   // Category manager state
   const [showCatManager, setShowCatManager] = useState(false);
   const [newCatName, setNewCatName] = useState("");
+
+  // Edit media state
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editCaption, setEditCaption] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [editSaving, setEditSaving] = useState(false);
 
   const getUrl = (path: string) => {
     if (path.startsWith("http")) return path;
@@ -139,6 +146,26 @@ export function GalleryTab({ galleryImages, galleryCategories, supabaseUrl }: Ga
     });
   };
 
+  const startEdit = (img: Record<string, unknown>) => {
+    setEditingId(String(img.id));
+    setEditCaption(String(img.caption || ""));
+    setEditDescription(String(img.description || ""));
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editingId) return;
+    setEditSaving(true);
+    const res = await updateGalleryMedia(editingId, { caption: editCaption, description: editDescription });
+    setEditSaving(false);
+    if (res.success) {
+      toast.success("Media updated!");
+      setEditingId(null);
+      startTransition(() => router.refresh());
+    } else {
+      toast.error(res.error);
+    }
+  };
+
   const filtered = filterCat === "all"
     ? galleryImages
     : galleryImages.filter((img) => img.category === filterCat);
@@ -146,6 +173,62 @@ export function GalleryTab({ galleryImages, galleryCategories, supabaseUrl }: Ga
   return (
     <>
       {dialog}
+
+      {/* Edit Panel — slide-in from right */}
+      {editingId && (
+        <div className="fixed inset-0 z-50 flex">
+          <div className="flex-1 bg-black/40 backdrop-blur-sm" onClick={() => setEditingId(null)} />
+          <div className="w-full max-w-sm bg-white shadow-2xl flex flex-col animate-in slide-in-from-right duration-200">
+            <div className="flex items-center justify-between border-b px-5 py-4">
+              <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                <Pencil className="h-4 w-4 text-orange-500" />
+                Edit Media
+              </h3>
+              <button onClick={() => setEditingId(null)} className="rounded-full p-1 hover:bg-gray-100">
+                <X className="h-5 w-5 text-gray-500" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-5 space-y-4">
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold text-gray-500 uppercase tracking-wider">Title / Caption</label>
+                <input
+                  type="text"
+                  value={editCaption}
+                  onChange={(e) => setEditCaption(e.target.value)}
+                  placeholder="e.g. Sunset BBQ Evening"
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</label>
+                <textarea
+                  rows={4}
+                  value={editDescription}
+                  onChange={(e) => setEditDescription(e.target.value)}
+                  placeholder="Optional: A short description about this video or image…"
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
+                />
+              </div>
+            </div>
+            <div className="border-t px-5 py-4 flex gap-2">
+              <button
+                onClick={handleSaveEdit}
+                disabled={editSaving}
+                className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600 disabled:opacity-50 transition-colors"
+              >
+                <Check className="h-4 w-4" />
+                {editSaving ? "Saving…" : "Save Changes"}
+              </button>
+              <button
+                onClick={() => setEditingId(null)}
+                className="rounded-lg border px-4 py-2 text-sm hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="space-y-6">
         {/* Upload Panel */}
@@ -315,6 +398,13 @@ export function GalleryTab({ galleryImages, galleryCategories, supabaseUrl }: Ga
                     </div>
                     {/* Bottom action buttons */}
                     <div className="flex gap-1 justify-end">
+                      <button
+                        onClick={() => startEdit(img)}
+                        className="flex items-center gap-1 rounded-lg bg-white/90 px-2 py-1 text-xs font-medium text-gray-700 hover:bg-white shadow"
+                        title="Edit title & description"
+                      >
+                        <Pencil className="h-3 w-3" />
+                      </button>
                       <button
                         onClick={() => handleToggleVisibility(img)}
                         className="flex items-center gap-1 rounded-lg bg-white/90 px-2 py-1 text-xs font-medium text-gray-700 hover:bg-white shadow"

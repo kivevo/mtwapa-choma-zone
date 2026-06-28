@@ -9,12 +9,11 @@ import { GalleryImage } from "@/components/gallery-image";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Button } from "@/components/ui/button";
-import { GALLERY_CATEGORY_LABELS } from "@/lib/utils";
-import type { GalleryImage as GalleryImageType } from "@/types/database.types";
-import type { SiteSettings } from "@/types/database.types";
+import type { GalleryCategoryRow, GalleryImage as GalleryImageType, SiteSettings } from "@/types/database.types";
 
 interface GallerySectionProps {
   images: GalleryImageType[];
+  categories: GalleryCategoryRow[];
   supabaseUrl?: string;
   settings: SiteSettings;
   preview?: boolean;
@@ -22,6 +21,7 @@ interface GallerySectionProps {
 
 export function GallerySection({
   images,
+  categories,
   supabaseUrl,
   settings,
   preview = false,
@@ -29,7 +29,7 @@ export function GallerySection({
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  const categories = ["all", ...Object.keys(GALLERY_CATEGORY_LABELS)];
+  const filterCategories = [{ slug: "all", name: "All" }, ...categories];
 
   const filtered =
     activeCategory === "all"
@@ -61,20 +61,18 @@ export function GallerySection({
         />
 
         <div className="mb-8 flex flex-wrap justify-center gap-2">
-          {categories.map((cat) => (
+          {filterCategories.map((cat) => (
             <button
-              key={cat}
+              key={cat.slug}
               type="button"
-              onClick={() => setActiveCategory(cat)}
+              onClick={() => setActiveCategory(cat.slug)}
               className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
-                activeCategory === cat
+                activeCategory === cat.slug
                   ? "bg-ember text-sand shadow-ember"
                   : "bg-white text-charcoal/70 hover:bg-palm/10"
               }`}
             >
-              {cat === "all"
-                ? "All"
-                : GALLERY_CATEGORY_LABELS[cat] ?? cat}
+              {cat.name}
             </button>
           ))}
         </div>

@@ -57,6 +57,7 @@ export interface GalleryImage {
   storage_path: string;
   media_type?: "image" | "video";
   caption: string | null;
+  description: string | null;
   display_order: number;
   is_visible: boolean;
   created_at: string;

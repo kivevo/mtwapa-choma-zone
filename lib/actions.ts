@@ -440,6 +440,14 @@ export async function toggleGalleryImageVisibility(id: string, is_visible: boole
   revalidatePath("/", "layout"); return { success: true };
 }
 
+export async function updateGalleryMedia(id: string, data: { caption: string; description: string }) {
+  if (!isSupabaseConfigured()) return { success: false, error: "Not configured" };
+  const supabase = await createClient();
+  const { error } = await supabase.from("gallery_images").update(data).eq("id", id);
+  if (error) return { success: false, error: error.message };
+  revalidatePath("/", "layout"); return { success: true };
+}
+
 // ── EVENT TYPES ───────────────────────────────────────────────────
 export async function createEventType(data: {
   name: string; description: string; icon_name: string; display_order: number;
@@ -524,12 +532,17 @@ export async function getRecycleBinItems() {
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - 30);
 
-  const [gallery, menuItems, menuCats, eventTypes, calEvents] = await Promise.all([
+  const [gallery, menuItems, menuCats, eventTypes, calEvents, galleryCats, testims, contacts, inq, resv] = await Promise.all([
     supabase.from("gallery_images").select("id, caption, storage_path, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
     supabase.from("menu_items").select("id, name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
     supabase.from("menu_categories").select("id, name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
     supabase.from("event_types").select("id, name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
     supabase.from("events_calendar").select("id, title, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
+    supabase.from("gallery_categories").select("id, name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
+    supabase.from("testimonials").select("id, customer_name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
+    supabase.from("contact_messages").select("id, full_name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
+    supabase.from("event_inquiries").select("id, full_name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
+    supabase.from("table_reservations").select("id, guest_name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
   ]);
 
   const items = [
@@ -538,6 +551,11 @@ export async function getRecycleBinItems() {
     ...(menuCats.data ?? []).map((r) => ({ ...r, table: "menu_categories", label: r.name })),
     ...(eventTypes.data ?? []).map((r) => ({ ...r, table: "event_types", label: r.name })),
     ...(calEvents.data ?? []).map((r) => ({ ...r, table: "events_calendar", label: r.title })),
+    ...(galleryCats.data ?? []).map((r) => ({ ...r, table: "gallery_categories", label: r.name })),
+    ...(testims.data ?? []).map((r) => ({ ...r, table: "testimonials", label: r.customer_name })),
+    ...(contacts.data ?? []).map((r) => ({ ...r, table: "contact_messages", label: r.full_name })),
+    ...(inq.data ?? []).map((r) => ({ ...r, table: "event_inquiries", label: r.full_name })),
+    ...(resv.data ?? []).map((r) => ({ ...r, table: "table_reservations", label: r.guest_name })),
   ].sort((a, b) => new Date(b.deleted_at!).getTime() - new Date(a.deleted_at!).getTime());
 
   return { success: true, items };
@@ -572,10 +590,28 @@ export async function createTestimonial(data: {
   revalidatePath("/", "layout"); return { success: true };
 }
 
+export async function updateTestimonial(id: string, data: {
+  customer_name: string; rating: number; comment: string; approved: boolean;
+}) {
+  if (!isSupabaseConfigured()) return { success: false, error: "Not configured" };
+  const supabase = await createClient();
+  const { error } = await supabase.from("testimonials").update(data).eq("id", id);
+  if (error) return { success: false, error: error.message };
+  revalidatePath("/", "layout"); return { success: true };
+}
+
 export async function deleteTestimonial(id: string) {
   if (!isSupabaseConfigured()) return { success: false, error: "Not configured" };
   const supabase = await createClient();
-  const { error } = await supabase.from("testimonials").delete().eq("id", id);
+  const { error } = await supabase.from("testimonials").update({ deleted_at: new Date().toISOString() }).eq("id", id);
+  if (error) return { success: false, error: error.message };
+  revalidatePath("/", "layout"); return { success: true };
+}
+
+export async function deleteReservation(id: string) {
+  if (!isSupabaseConfigured()) return { success: false, error: "Not configured" };
+  const supabase = await createClient();
+  const { error } = await supabase.from("table_reservations").update({ deleted_at: new Date().toISOString() }).eq("id", id);
   if (error) return { success: false, error: error.message };
   revalidatePath("/", "layout"); return { success: true };
 }

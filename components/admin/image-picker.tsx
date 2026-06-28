@@ -9,9 +9,10 @@ interface ImagePickerProps {
   onSelect: (url: string) => void;
   supabaseUrl: string;
   images: Array<Record<string, unknown>>;
+  mediaType?: "image" | "video" | "all";
 }
 
-export function ImagePicker({ open, onClose, onSelect, supabaseUrl, images }: ImagePickerProps) {
+export function ImagePicker({ open, onClose, onSelect, supabaseUrl, images, mediaType = "image" }: ImagePickerProps) {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<string | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -45,7 +46,12 @@ export function ImagePicker({ open, onClose, onSelect, supabaseUrl, images }: Im
   const filtered = images.filter((img) => {
     const caption = String(img.caption ?? "").toLowerCase();
     const path = String(img.storage_path ?? "").toLowerCase();
-    return caption.includes(search.toLowerCase()) || path.includes(search.toLowerCase());
+    const type = String(img.media_type ?? "image");
+    
+    const matchesSearch = caption.includes(search.toLowerCase()) || path.includes(search.toLowerCase());
+    const matchesType = mediaType === "all" || type === mediaType;
+
+    return matchesSearch && matchesType;
   });
 
   if (!open) return null;
@@ -63,8 +69,8 @@ export function ImagePicker({ open, onClose, onSelect, supabaseUrl, images }: Im
         {/* Header */}
         <div className="flex items-center justify-between border-b px-6 py-4">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Select Image</h2>
-            <p className="text-xs text-gray-500 mt-0.5">{images.length} images in your media library</p>
+            <h2 className="text-lg font-bold text-gray-900">Select {mediaType === "video" ? "Video" : "Image"}</h2>
+            <p className="text-xs text-gray-500 mt-0.5">{filtered.length} {mediaType === "video" ? "videos" : "images"} in your media library</p>
           </div>
           <button onClick={onClose} className="rounded-full p-2 hover:bg-gray-100 transition-colors">
             <X className="h-5 w-5 text-gray-500" />
@@ -86,8 +92,8 @@ export function ImagePicker({ open, onClose, onSelect, supabaseUrl, images }: Im
           {filtered.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <Upload className="h-12 w-12 text-gray-300 mb-3" />
-              <p className="font-medium text-gray-500">No images found</p>
-              <p className="text-sm text-gray-400 mt-1">Upload images in the Gallery tab first</p>
+              <p className="font-medium text-gray-500">No {mediaType === "video" ? "videos" : "images"} found</p>
+              <p className="text-sm text-gray-400 mt-1">Upload {mediaType === "video" ? "videos" : "images"} in the Gallery tab first</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
@@ -97,10 +103,22 @@ export function ImagePicker({ open, onClose, onSelect, supabaseUrl, images }: Im
                 return (
                   <button key={String(img.id)} onClick={() => setSelected(isSelected ? null : url)}
                     className={`group relative aspect-square overflow-hidden rounded-xl border-2 transition-all ${isSelected ? "border-orange-500 ring-2 ring-orange-200" : "border-gray-200 hover:border-orange-300"}`}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={url} alt={String(img.caption ?? "")}
-                      className="h-full w-full object-cover transition-transform group-hover:scale-105"
-                      onError={(e) => { (e.target as HTMLImageElement).src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect width='100' height='100' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%239ca3af' font-size='12'%3ENo preview%3C/text%3E%3C/svg%3E"; }} />
+                    {/* Media element */}
+                    {mediaType === "video" || String(img.media_type) === "video" ? (
+                      <video 
+                        src={url} 
+                        className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                        muted
+                        playsInline
+                        preload="metadata"
+                      />
+                    ) : (
+                      <img src={url} alt={String(img.caption ?? "")}
+                        className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                        onError={(e) => { (e.target as HTMLImageElement).src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect width='100' height='100' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%239ca3af' font-size='12'%3ENo preview%3C/text%3E%3C/svg%3E"; }} 
+                      />
+                    )}
+                    
                     {isSelected && (
                       <div className="absolute inset-0 bg-orange-500/20 flex items-center justify-center">
                         <div className="rounded-full bg-orange-500 p-1"><Check className="h-4 w-4 text-white" /></div>
@@ -120,12 +138,12 @@ export function ImagePicker({ open, onClose, onSelect, supabaseUrl, images }: Im
 
         {/* Footer */}
         <div className="flex items-center justify-between border-t px-6 py-4">
-          <p className="text-sm text-gray-500">{selected ? "1 image selected" : "No image selected"}</p>
+          <p className="text-sm text-gray-500">{selected ? `1 ${mediaType === "video" ? "video" : "image"} selected` : `No ${mediaType === "video" ? "video" : "image"} selected`}</p>
           <div className="flex gap-2">
             <button onClick={onClose} className="rounded-xl border px-4 py-2 text-sm font-medium hover:bg-gray-50 transition-colors">Cancel</button>
             <button onClick={() => { if (selected) { onSelect(selected); onClose(); setSelected(null); } }} disabled={!selected}
               className="rounded-xl bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600 disabled:opacity-40 transition-colors">
-              Use This Image
+              Use This {mediaType === "video" ? "Video" : "Image"}
             </button>
           </div>
         </div>

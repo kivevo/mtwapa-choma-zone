@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Trash2, RotateCcw, Image as ImageIcon, ShoppingBag, Tag, CalendarDays, Clock, AlertTriangle } from "lucide-react";
+import { Trash2, RotateCcw, Image as ImageIcon, ShoppingBag, Tag, CalendarDays, Clock, AlertTriangle, MessageCircle } from "lucide-react";
 import { restoreRecycleBinItem, permanentlyDeleteItem } from "@/lib/actions";
 import { useConfirmDialog } from "@/components/admin/confirm-dialog";
 
@@ -13,6 +13,11 @@ const TABLE_ICONS: Record<string, React.ReactNode> = {
   menu_categories: <Tag className="h-4 w-4 text-orange-400" />,
   event_types: <CalendarDays className="h-4 w-4 text-blue-500" />,
   events_calendar: <CalendarDays className="h-4 w-4 text-green-500" />,
+  gallery_categories: <Tag className="h-4 w-4 text-purple-400" />,
+  testimonials: <MessageCircle className="h-4 w-4 text-pink-500" />,
+  contact_messages: <MessageCircle className="h-4 w-4 text-teal-500" />,
+  event_inquiries: <CalendarDays className="h-4 w-4 text-indigo-500" />,
+  table_reservations: <CalendarDays className="h-4 w-4 text-emerald-500" />,
 };
 
 const TABLE_LABELS: Record<string, string> = {
@@ -21,6 +26,11 @@ const TABLE_LABELS: Record<string, string> = {
   menu_categories: "Menu Category",
   event_types: "Event Type",
   events_calendar: "Calendar Event",
+  gallery_categories: "Gallery Category",
+  testimonials: "Testimonial",
+  contact_messages: "Contact Message",
+  event_inquiries: "Event Inquiry",
+  table_reservations: "Table Reservation",
 };
 
 function daysLeft(deletedAt: string) {

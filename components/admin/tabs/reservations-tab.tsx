@@ -4,8 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Check, X, Calendar, Clock, Users, Mail, FileText, Trash2, CheckCircle2, MessageCircle } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
-import { updateReservationStatus } from "@/lib/actions";
+import { updateReservationStatus, deleteReservation } from "@/lib/actions";
 
 export function ReservationsTab({ reservations }: { reservations: Array<Record<string, unknown>> }) {
   const router = useRouter();
@@ -24,15 +23,14 @@ export function ReservationsTab({ reservations }: { reservations: Array<Record<s
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to permanently delete this reservation?")) return;
+    if (!confirm("Are you sure you want to move this reservation to the Recycle Bin?")) return;
     setUpdating(id);
-    const supabase = createClient();
-    const { error } = await supabase.from("table_reservations").delete().eq("id", id);
+    const result = await deleteReservation(id);
     setUpdating(null);
-    if (error) {
-      toast.error(error.message);
+    if (!result.success) {
+      toast.error(result.error);
     } else {
-      toast.success("Reservation deleted");
+      toast.success("Reservation moved to Recycle Bin");
       router.refresh();
     }
   };

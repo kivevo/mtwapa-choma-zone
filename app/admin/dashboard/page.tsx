@@ -61,12 +61,17 @@ export default async function AdminDashboardPage() {
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - 30);
 
-    const [g, mi, mc, et, ce] = await Promise.all([
+    const [g, mi, mc, et, ce, gc, testims, contacts, inq, resv] = await Promise.all([
       supabase.from("gallery_images").select("id, caption, storage_path, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
       supabase.from("menu_items").select("id, name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
       supabase.from("menu_categories").select("id, name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
       supabase.from("event_types").select("id, name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
       supabase.from("events_calendar").select("id, title, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
+      supabase.from("gallery_categories").select("id, name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
+      supabase.from("testimonials").select("id, customer_name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
+      supabase.from("contact_messages").select("id, full_name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
+      supabase.from("event_inquiries").select("id, full_name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
+      supabase.from("table_reservations").select("id, guest_name, deleted_at").not("deleted_at", "is", null).gte("deleted_at", cutoff.toISOString()),
     ]);
 
     recycleBinItems = [
@@ -75,6 +80,11 @@ export default async function AdminDashboardPage() {
       ...(mc.data ?? []).map((r) => ({ ...r, table: "menu_categories", label: r.name })),
       ...(et.data ?? []).map((r) => ({ ...r, table: "event_types", label: r.name })),
       ...(ce.data ?? []).map((r) => ({ ...r, table: "events_calendar", label: r.title })),
+      ...(gc.data ?? []).map((r) => ({ ...r, table: "gallery_categories", label: r.name })),
+      ...(testims.data ?? []).map((r) => ({ ...r, table: "testimonials", label: r.customer_name })),
+      ...(contacts.data ?? []).map((r) => ({ ...r, table: "contact_messages", label: r.full_name })),
+      ...(inq.data ?? []).map((r) => ({ ...r, table: "event_inquiries", label: r.full_name })),
+      ...(resv.data ?? []).map((r) => ({ ...r, table: "table_reservations", label: r.guest_name })),
     ].sort((a, b) => new Date(b.deleted_at as string).getTime() - new Date(a.deleted_at as string).getTime());
   } catch {
     // Migration not yet applied — recycle bin is empty until then
@@ -84,6 +94,7 @@ export default async function AdminDashboardPage() {
   const activeGalleryImages = (galleryImages ?? []).filter((img) => !img.deleted_at);
   const activeMenuItems = (menuItems ?? []).filter((item) => !item.deleted_at);
   const activeMenuCategories = (menuCategories ?? []).filter((cat) => !cat.deleted_at);
+  const activeGalleryCategories = (galleryCategories ?? []).filter((cat) => !cat.deleted_at);
 
   return (
     <AdminDashboard
@@ -93,7 +104,7 @@ export default async function AdminDashboardPage() {
       menuCategories={activeMenuCategories}
       menuItems={activeMenuItems}
       galleryImages={activeGalleryImages}
-      galleryCategories={galleryCategories ?? []}
+      galleryCategories={activeGalleryCategories}
       eventTypes={(eventTypes ?? []).filter((e) => !e.deleted_at)}
       calendarEvents={(calendarEvents ?? []).filter((e) => !e.deleted_at)}
       settings={settings}

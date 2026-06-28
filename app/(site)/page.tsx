@@ -6,11 +6,13 @@ import {
   getTestimonials,
   getCalendarEvents,
   getSupabasePublicUrl,
+  getGalleryCategories,
 } from "@/lib/data";
 import { Hero } from "@/components/sections/hero";
 import { About } from "@/components/sections/about";
 import { MenuSection } from "@/components/sections/menu-section";
 import { GallerySection } from "@/components/sections/gallery-section";
+import { VideoShowcase } from "@/components/sections/video-showcase";
 import { EventsSection } from "@/components/sections/events-section";
 import { FamilyFunSection } from "@/components/sections/family-fun";
 import { StopoverSection } from "@/components/sections/stopover";
@@ -28,6 +30,7 @@ export default async function HomePage() {
     eventTypes,
     testimonials,
     calendarEvents,
+    galleryCategories,
   ] = await Promise.all([
     getSiteSettings(),
     getMenuCategories(),
@@ -35,9 +38,12 @@ export default async function HomePage() {
     getEventTypes(),
     getTestimonials(),
     getCalendarEvents(),
+    getGalleryCategories(),
   ]);
 
   const supabaseUrl = getSupabasePublicUrl();
+  const photos = galleryImages.filter((img) => img.media_type !== "video");
+  const videos = galleryImages.filter((img) => img.media_type === "video");
 
   return (
     <>
@@ -46,11 +52,13 @@ export default async function HomePage() {
       <About settings={settings} />
       <MenuSection categories={menuCategories} preview />
       <GallerySection
-        images={galleryImages}
+        images={photos}
+        categories={galleryCategories}
         supabaseUrl={supabaseUrl}
         settings={settings}
         preview
       />
+      <VideoShowcase videos={videos} supabaseUrl={supabaseUrl} />
       <EventsSection eventTypes={eventTypes} />
       <FamilyFunSection settings={settings} />
       <StopoverSection settings={settings} />

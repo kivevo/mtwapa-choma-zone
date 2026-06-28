@@ -42,17 +42,6 @@ export const GOOGLE_MAPS_EMBED =
 export const GOOGLE_MAPS_DIRECTIONS =
   "https://www.google.com/maps/search/?api=1&query=Choma+Zone+Mtwapa+Palms&query_place_id=ChIJH9J-1GcJQBgRsgp0tmZBpBY";
 
-export const GALLERY_CATEGORY_LABELS: Record<string, string> = {
-  garden: "Garden",
-  food_choma: "Food & Choma",
-  kids_playground: "Kids' Playground",
-  choma_area: "Choma Area",
-  coffee_shop: "Coffee Shop",
-  parking: "Parking",
-  signage: "I ❤️ MTWAPA Sign",
-  bar_area: "Bar Area",
-  events: "Events",
-};
 
 export const NAV_LINKS = [
   { href: "#home", label: "Home" },
