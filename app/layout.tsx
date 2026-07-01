@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, DM_Sans } from "next/font/google";
 import { Toaster } from "sonner";
 import { GoogleAnalytics } from "@/components/seo/google-analytics";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -65,6 +66,7 @@ export default function RootLayout({
       >
         <GoogleAnalytics gaId={GA_ID} />
         {children}
+        <ScrollToTop />
         <Toaster position="top-center" richColors closeButton />
       </body>
     </html>
