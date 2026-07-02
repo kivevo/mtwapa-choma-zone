@@ -7,6 +7,7 @@ import { Trash2, Plus, X, Check, Edit2 } from "lucide-react";
 import {
   toggleTestimonialApproval,
   createTestimonial,
+  updateTestimonial,
   deleteTestimonial,
 } from "@/lib/actions";
 import { useConfirmDialog } from "@/components/admin/confirm-dialog";
