@@ -93,6 +93,7 @@ export function GalleryTab({ galleryImages, galleryCategories, supabaseUrl }: Ga
       message: `"${String(img.caption || img.storage_path)}" will be moved to the Recycle Bin. You can restore it within 30 days.`,
       confirmLabel: "Move to Bin",
       danger: true,
+      expectedText: String(img.caption || img.storage_path),
       onConfirm: async () => {
         const res = await deleteGalleryImage(String(img.id));
         if (res.success) {
@@ -134,6 +135,7 @@ export function GalleryTab({ galleryImages, galleryCategories, supabaseUrl }: Ga
       message: "This removes the category. Images already in this category will remain but become uncategorized. This can be reversed from the Recycle Bin.",
       confirmLabel: "Remove Category",
       danger: true,
+      expectedText: String(cat.name),
       onConfirm: async () => {
         const res = await deleteGalleryCategory(String(cat.id));
         if (res.success) {

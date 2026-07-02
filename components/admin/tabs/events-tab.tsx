@@ -8,6 +8,7 @@ import {
   createEventType, updateEventType, deleteEventType,
   createCalendarEvent, updateCalendarEvent, deleteCalendarEvent,
 } from "@/lib/actions";
+import { useConfirmDialog } from "@/components/admin/confirm-dialog";
 
 const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 const emptyType = { name: "", description: "", icon_name: "", display_order: 0 };
@@ -27,6 +28,7 @@ export function EventsTab({
   const [typeForm, setTypeForm] = useState({ ...emptyType });
   const [calForm, setCalForm] = useState({ ...emptyEvent });
   const [saving, setSaving] = useState(false);
+  const { confirm, dialog } = useConfirmDialog();
 
   const reset = () => { setShowAdd(false); setEditItem(null); setTypeForm({ ...emptyType }); setCalForm({ ...emptyEvent }); };
 
@@ -41,11 +43,17 @@ export function EventsTab({
     if (result.success) { toast.success(editItem ? "Updated" : "Added"); reset(); router.refresh(); }
     else toast.error(result.error);
   };
-  const handleDeleteType = async (id: string) => {
-    if (!confirm("Delete this event type?")) return;
-    const result = await deleteEventType(id);
-    if (result.success) { toast.success("Deleted"); router.refresh(); }
-    else toast.error(result.error);
+  const handleDeleteType = (id: string, name: string) => {
+    confirm({
+      title: "Delete Event Type",
+      message: "Are you sure you want to delete this event type?",
+      expectedText: name,
+      onConfirm: async () => {
+        const result = await deleteEventType(id);
+        if (result.success) { toast.success("Deleted"); router.refresh(); }
+        else toast.error(result.error);
+      }
+    });
   };
 
   // ── Calendar Events ──
@@ -59,11 +67,17 @@ export function EventsTab({
     if (result.success) { toast.success(editItem ? "Updated" : "Added"); reset(); router.refresh(); }
     else toast.error(result.error);
   };
-  const handleDeleteCal = async (id: string) => {
-    if (!confirm("Delete this calendar event?")) return;
-    const result = await deleteCalendarEvent(id);
-    if (result.success) { toast.success("Deleted"); router.refresh(); }
-    else toast.error(result.error);
+  const handleDeleteCal = (id: string, title: string) => {
+    confirm({
+      title: "Delete Calendar Event",
+      message: "Are you sure you want to delete this calendar event?",
+      expectedText: title,
+      onConfirm: async () => {
+        const result = await deleteCalendarEvent(id);
+        if (result.success) { toast.success("Deleted"); router.refresh(); }
+        else toast.error(result.error);
+      }
+    });
   };
 
   const typeFormPanel = () => (
@@ -145,6 +159,7 @@ export function EventsTab({
 
   return (
     <div className="space-y-5">
+      {dialog}
       {/* Sub-tabs */}
       <div className="flex rounded-xl border bg-gray-50 p-1 w-fit">
         <button onClick={() => { setActiveSection("types"); reset(); }}
@@ -178,7 +193,7 @@ export function EventsTab({
                 <div className="flex gap-2 shrink-0">
                   <button onClick={() => { setEditItem(et); setShowAdd(false); setTypeForm({ name: String(et.name), description: String(et.description ?? ""), icon_name: String(et.icon_name ?? ""), display_order: Number(et.display_order) }); }}
                     className="rounded p-1.5 hover:bg-gray-100 transition-colors"><Pencil className="h-3.5 w-3.5 text-gray-500" /></button>
-                  <button onClick={() => handleDeleteType(String(et.id))}
+                  <button onClick={() => handleDeleteType(String(et.id), String(et.name))}
                     className="rounded p-1.5 hover:bg-red-100 transition-colors"><Trash2 className="h-3.5 w-3.5 text-red-500" /></button>
                 </div>
               </div>
@@ -212,7 +227,7 @@ export function EventsTab({
                 <div className="flex gap-2 shrink-0">
                   <button onClick={() => { setEditItem(ev); setShowAdd(false); setCalForm({ title: String(ev.title), description: String(ev.description ?? ""), day_of_week: String(ev.day_of_week ?? "Friday"), event_date: ev.event_date ? String(ev.event_date) : null, is_recurring: Boolean(ev.is_recurring) }); }}
                     className="rounded p-1.5 hover:bg-gray-100 transition-colors"><Pencil className="h-3.5 w-3.5 text-gray-500" /></button>
-                  <button onClick={() => handleDeleteCal(String(ev.id))}
+                  <button onClick={() => handleDeleteCal(String(ev.id), String(ev.title))}
                     className="rounded p-1.5 hover:bg-red-100 transition-colors"><Trash2 className="h-3.5 w-3.5 text-red-500" /></button>
                 </div>
               </div>

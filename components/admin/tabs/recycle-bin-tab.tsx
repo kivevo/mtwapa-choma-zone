@@ -72,6 +72,7 @@ export function RecycleBinTab({ items }: { items: Array<Record<string, unknown>>
       message: `Permanently delete "${String(item.label)}"? This CANNOT be undone.`,
       confirmLabel: "Delete Forever",
       danger: true,
+      expectedText: String(item.label),
       onConfirm: async () => {
         setBusy(String(item.id));
         const res = await permanentlyDeleteItem(String(item.table), String(item.id));

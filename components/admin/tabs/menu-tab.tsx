@@ -8,6 +8,7 @@ import {
   createMenuCategory, updateMenuCategory, deleteMenuCategory,
   createMenuItem, updateMenuItem, deleteMenuItem, toggleMenuItemAvailability,
 } from "@/lib/actions";
+import { useConfirmDialog } from "@/components/admin/confirm-dialog";
 
 const emptyItem = { category_id: "", name: "", description: "", price_kes: 0, display_order: 0, is_available: true };
 const emptyCat = { name: "", slug: "", display_order: 0, is_signature: false };
@@ -28,6 +29,7 @@ export function MenuTab({
   const [showAddItem, setShowAddItem] = useState<string | null>(null); // category id
   const [itemForm, setItemForm] = useState(emptyItem);
   const [saving, setSaving] = useState(false);
+  const { confirm, dialog } = useConfirmDialog();
 
   const toggleCat = (id: string) => {
     setExpandedCats((prev) => {
@@ -53,11 +55,17 @@ export function MenuTab({
     if (result.success) { toast.success(editCat ? "Category updated" : "Category added"); setEditCat(null); setShowAddCat(false); setCatForm(emptyCat); router.refresh(); }
     else toast.error(result.error);
   };
-  const handleDeleteCat = async (id: string) => {
-    if (!confirm("Delete category and ALL its items?")) return;
-    const result = await deleteMenuCategory(id);
-    if (result.success) { toast.success("Deleted"); router.refresh(); }
-    else toast.error(result.error);
+  const handleDeleteCat = (id: string, name: string) => {
+    confirm({
+      title: "Delete Category",
+      message: "Delete this category and ALL its items?",
+      expectedText: name,
+      onConfirm: async () => {
+        const result = await deleteMenuCategory(id);
+        if (result.success) { toast.success("Deleted"); router.refresh(); }
+        else toast.error(result.error);
+      }
+    });
   };
 
   // ── Item actions ──
@@ -71,11 +79,17 @@ export function MenuTab({
     if (result.success) { toast.success(editItem ? "Item updated" : "Item added"); setEditItem(null); setShowAddItem(null); setItemForm(emptyItem); router.refresh(); }
     else toast.error(result.error);
   };
-  const handleDeleteItem = async (id: string) => {
-    if (!confirm("Delete this menu item?")) return;
-    const result = await deleteMenuItem(id);
-    if (result.success) { toast.success("Deleted"); router.refresh(); }
-    else toast.error(result.error);
+  const handleDeleteItem = (id: string, name: string) => {
+    confirm({
+      title: "Delete Menu Item",
+      message: "Are you sure you want to delete this menu item?",
+      expectedText: name,
+      onConfirm: async () => {
+        const result = await deleteMenuItem(id);
+        if (result.success) { toast.success("Deleted"); router.refresh(); }
+        else toast.error(result.error);
+      }
+    });
   };
   const handleToggleItem = async (id: string, current: boolean) => {
     const result = await toggleMenuItemAvailability(id, !current);
@@ -161,6 +175,7 @@ export function MenuTab({
 
   return (
     <div className="space-y-4">
+      {dialog}
       <div className="flex items-center justify-between">
         <p className="text-sm text-gray-500">{categories.length} categories · {menuItems.length} items</p>
         <button onClick={() => { setShowAddCat(true); setEditCat(null); setCatForm(emptyCat); }}
@@ -189,7 +204,7 @@ export function MenuTab({
               <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
                 <button onClick={() => { setEditCat(cat); setCatForm({ name: String(cat.name), slug: String(cat.slug), display_order: Number(cat.display_order), is_signature: Boolean(cat.is_signature) }); setShowAddCat(false); }}
                   className="rounded-lg border p-1.5 hover:bg-gray-100 transition-colors"><Pencil className="h-3.5 w-3.5" /></button>
-                <button onClick={() => handleDeleteCat(String(cat.id))}
+                <button onClick={() => handleDeleteCat(String(cat.id), String(cat.name))}
                   className="rounded-lg bg-red-50 p-1.5 text-red-500 hover:bg-red-100 transition-colors"><Trash2 className="h-3.5 w-3.5" /></button>
               </div>
             </div>
@@ -215,7 +230,7 @@ export function MenuTab({
                         </button>
                         <button onClick={() => { setEditItem(item); setShowAddItem(String(cat.id)); setItemForm({ category_id: String(item.category_id), name: String(item.name), description: String(item.description ?? ""), price_kes: Number(item.price_kes ?? 0), display_order: Number(item.display_order), is_available: Boolean(item.is_available) }); }}
                           className="rounded p-1 hover:bg-gray-200 transition-colors"><Pencil className="h-3.5 w-3.5 text-gray-500" /></button>
-                        <button onClick={() => handleDeleteItem(String(item.id))}
+                        <button onClick={() => handleDeleteItem(String(item.id), String(item.name))}
                           className="rounded p-1 hover:bg-red-100 transition-colors"><Trash2 className="h-3.5 w-3.5 text-red-500" /></button>
                       </div>
                     </div>

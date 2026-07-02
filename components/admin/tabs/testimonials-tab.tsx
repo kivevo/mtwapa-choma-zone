@@ -7,18 +7,18 @@ import { Trash2, Plus, X, Check, Edit2 } from "lucide-react";
 import {
   toggleTestimonialApproval,
   createTestimonial,
-  updateTestimonial,
   deleteTestimonial,
 } from "@/lib/actions";
+import { useConfirmDialog } from "@/components/admin/confirm-dialog";
 
 export function TestimonialsTab({ testimonials }: { testimonials: Array<Record<string, unknown>> }) {
   const router = useRouter();
   const [showAdd, setShowAdd] = useState(false);
   const [form, setForm] = useState({ customer_name: "", rating: 5, comment: "", approved: true });
   const [saving, setSaving] = useState(false);
-
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState({ customer_name: "", rating: 5, comment: "", approved: true });
+  const { confirm, dialog } = useConfirmDialog();
 
   const handleToggle = async (id: string, approved: boolean) => {
     const result = await toggleTestimonialApproval(id, approved);
@@ -26,11 +26,17 @@ export function TestimonialsTab({ testimonials }: { testimonials: Array<Record<s
     else toast.error(result.error);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Delete this testimonial?")) return;
-    const result = await deleteTestimonial(id);
-    if (result.success) { toast.success("Deleted"); router.refresh(); }
-    else toast.error(result.error);
+  const handleDelete = (id: string, name: string) => {
+    confirm({
+      title: "Delete Testimonial",
+      message: "Are you sure you want to delete this testimonial?",
+      expectedText: name,
+      onConfirm: async () => {
+        const result = await deleteTestimonial(id);
+        if (result.success) { toast.success("Deleted"); router.refresh(); }
+        else toast.error(result.error);
+      }
+    });
   };
 
   const handleAdd = async () => {
@@ -71,6 +77,7 @@ export function TestimonialsTab({ testimonials }: { testimonials: Array<Record<s
 
   return (
     <div className="space-y-4">
+      {dialog}
       <div className="flex items-center justify-between">
         <p className="text-sm text-gray-500">{testimonials.length} testimonial(s)</p>
         <button
@@ -187,7 +194,7 @@ export function TestimonialsTab({ testimonials }: { testimonials: Array<Record<s
                   className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${t.approved ? "bg-gray-100 hover:bg-gray-200 text-gray-700" : "bg-green-100 hover:bg-green-200 text-green-700"}`}>
                   {t.approved ? "Hide" : "Approve"}
                 </button>
-                <button onClick={() => handleDelete(String(t.id))}
+                <button onClick={() => handleDelete(String(t.id), String(t.customer_name))}
                   className="rounded-lg bg-red-50 p-1.5 text-red-500 hover:bg-red-100 transition-colors">
                   <Trash2 className="h-4 w-4" />
                 </button>

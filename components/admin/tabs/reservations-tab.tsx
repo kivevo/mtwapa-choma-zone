@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Check, X, Calendar, Clock, Users, Mail, FileText, Trash2, CheckCircle2, MessageCircle } from "lucide-react";
 import { updateReservationStatus, deleteReservation } from "@/lib/actions";
+import { useConfirmDialog } from "@/components/admin/confirm-dialog";
 
 export function ReservationsTab({ reservations }: { reservations: Array<Record<string, unknown>> }) {
   const router = useRouter();
   const [updating, setUpdating] = useState<string | null>(null);
+  const { confirm, dialog } = useConfirmDialog();
 
   const handleUpdateStatus = async (id: string, status: string) => {
     setUpdating(id);
@@ -22,17 +24,23 @@ export function ReservationsTab({ reservations }: { reservations: Array<Record<s
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to move this reservation to the Recycle Bin?")) return;
-    setUpdating(id);
-    const result = await deleteReservation(id);
-    setUpdating(null);
-    if (!result.success) {
-      toast.error(result.error);
-    } else {
-      toast.success("Reservation moved to Recycle Bin");
-      router.refresh();
-    }
+  const handleDelete = (id: string, name: string) => {
+    confirm({
+      title: "Delete Reservation",
+      message: "Are you sure you want to move this reservation to the Recycle Bin?",
+      expectedText: name,
+      onConfirm: async () => {
+        setUpdating(id);
+        const result = await deleteReservation(id);
+        setUpdating(null);
+        if (!result.success) {
+          toast.error(result.error);
+        } else {
+          toast.success("Reservation moved to Recycle Bin");
+          router.refresh();
+        }
+      }
+    });
   };
 
   const pending = reservations.filter((r) => r.status === "pending");
@@ -128,7 +136,7 @@ export function ReservationsTab({ reservations }: { reservations: Array<Record<s
 
           {(res.status === "completed" || res.status === "rejected" || res.status === "cancelled") && (
             <button
-              onClick={() => handleDelete(String(res.id))}
+              onClick={() => handleDelete(String(res.id), String(res.guest_name))}
               disabled={updating === res.id}
               className="flex items-center justify-center gap-1.5 rounded-xl border border-red-100 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-100 disabled:opacity-50 mt-2 sm:mt-0"
             >
@@ -142,6 +150,7 @@ export function ReservationsTab({ reservations }: { reservations: Array<Record<s
 
   return (
     <div className="space-y-8">
+      {dialog}
       {/* Pending Reservations */}
       <section>
         <div className="mb-4 flex items-center justify-between">

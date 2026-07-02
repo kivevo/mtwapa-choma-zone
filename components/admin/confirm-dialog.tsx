@@ -9,14 +9,19 @@ interface ConfirmDialogProps {
   message: string;
   confirmLabel?: string;
   danger?: boolean;
+  expectedText?: string;
   onConfirm: () => void;
   onCancel: () => void;
 }
 
 export function ConfirmDialog({
-  open, title, message, confirmLabel = "Delete", danger = true, onConfirm, onCancel,
+  open, title, message, confirmLabel = "Delete", danger = true, expectedText, onConfirm, onCancel,
 }: ConfirmDialogProps) {
+  const [inputValue, setInputValue] = useState("");
+
   if (!open) return null;
+
+  const isMatched = !expectedText || inputValue === expectedText;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -31,6 +36,20 @@ export function ConfirmDialog({
           <div className="flex-1">
             <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
             <p className="mt-1 text-sm text-gray-500">{message}</p>
+            {expectedText && (
+              <div className="mt-4">
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+                  Please type <span className="font-bold text-gray-900">{expectedText}</span> to confirm.
+                </label>
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
+                  placeholder={expectedText}
+                />
+              </div>
+            )}
           </div>
           <button onClick={onCancel} className="rounded-full p-1 text-gray-400 hover:bg-gray-100">
             <X className="h-5 w-5" />
@@ -44,8 +63,9 @@ export function ConfirmDialog({
             Cancel
           </button>
           <button
-            onClick={() => { onConfirm(); }}
-            className={`rounded-lg px-4 py-2 text-sm font-medium text-white ${
+            onClick={() => { onConfirm(); setInputValue(""); }}
+            disabled={!isMatched}
+            className={`rounded-lg px-4 py-2 text-sm font-medium text-white disabled:opacity-50 disabled:cursor-not-allowed ${
               danger ? "bg-red-600 hover:bg-red-700" : "bg-orange-500 hover:bg-orange-600"
             }`}
           >
@@ -65,6 +85,7 @@ export function useConfirmDialog() {
     message: string;
     confirmLabel?: string;
     danger?: boolean;
+    expectedText?: string;
     onConfirm: () => void;
   }>({ open: false, title: "", message: "", onConfirm: () => {} });
 
@@ -81,6 +102,7 @@ export function useConfirmDialog() {
       message={state.message}
       confirmLabel={state.confirmLabel}
       danger={state.danger}
+      expectedText={state.expectedText}
       onConfirm={() => { state.onConfirm(); close(); }}
       onCancel={close}
     />
