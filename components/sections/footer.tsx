@@ -10,7 +10,7 @@ import {
   FacebookIcon,
   TikTokIcon,
 } from "@/components/icons/social-icons";
-import { formatPhoneDisplay, formatPhoneForTel, WHATSAPP_URL, resolveImageUrl } from "@/lib/utils";
+import { formatPhoneDisplay, formatPhoneForTel, generateWhatsAppUrl, resolveImageUrl } from "@/lib/utils";
 import type { SiteSettings } from "@/types/database.types";
 
 interface FooterProps {
@@ -123,7 +123,7 @@ export function Footer({ settings }: FooterProps) {
               </li>
               <li>
                 <a
-                  href={WHATSAPP_URL}
+                  href={generateWhatsAppUrl(settings.phone_primary)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 hover:text-sand"

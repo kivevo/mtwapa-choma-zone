@@ -51,11 +51,15 @@ export function formatPhoneDisplay(phone: string): string {
   return phone;
 }
 
-export const WHATSAPP_NUMBER = "254711333090";
-export const WHATSAPP_URL =
-  "https://wa.me/254711333090?text=Hi%20Choma%20Zone%20Mtwapa%20Palms%2C%20I%27d%20like%20to%20inquire...";
+export function generateWhatsAppUrl(phoneStr: string, text: string = "Hi Choma Zone Mtwapa Palms, I'd like to inquire..."): string {
+  if (!phoneStr) return "";
+  const digits = phoneStr.replace(/\D/g, "");
+  const basePhone = digits.startsWith("0") ? `254${digits.slice(1)}` : digits;
+  return `https://wa.me/${basePhone}?text=${encodeURIComponent(text)}`;
+}
 
-export function generateWhatsAppOrderUrl(itemName: string, phoneStr: string = WHATSAPP_NUMBER): string {
+export function generateWhatsAppOrderUrl(itemName: string, phoneStr: string): string {
+  if (!phoneStr) return "";
   const digits = phoneStr.replace(/\D/g, "");
   const basePhone = digits.startsWith("0") ? `254${digits.slice(1)}` : digits;
   const message = `Hi Choma Zone Mtwapa Palms, I would like to order:\n\n1x ${itemName}\n\nPlease let me know if this is available.`;

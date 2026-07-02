@@ -50,7 +50,7 @@ export default async function HomePage() {
       <RestaurantJsonLd settings={settings} />
       <Hero settings={settings} />
       <About settings={settings} />
-      <MenuSection categories={menuCategories} preview />
+      <MenuSection categories={menuCategories} settings={settings} preview />
       <GallerySection
         images={photos}
         categories={galleryCategories}
@@ -59,7 +59,7 @@ export default async function HomePage() {
         preview
       />
       <VideoShowcase videos={videos} supabaseUrl={supabaseUrl} />
-      <EventsSection eventTypes={eventTypes} />
+      <EventsSection eventTypes={eventTypes} settings={settings} />
       <FamilyFunSection settings={settings} />
       <StopoverSection settings={settings} />
       <HappyHourSection

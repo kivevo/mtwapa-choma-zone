@@ -6,16 +6,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { formatKES, WHATSAPP_URL, generateWhatsAppOrderUrl } from "@/lib/utils";
-import type { MenuCategoryWithItems } from "@/types/database.types";
+import { formatKES, generateWhatsAppOrderUrl, generateWhatsAppUrl } from "@/lib/utils";
+import type { MenuCategoryWithItems, SiteSettings } from "@/types/database.types";
 import { MessageCircle } from "lucide-react";
 
 interface MenuSectionProps {
   categories: MenuCategoryWithItems[];
+  settings: SiteSettings;
   preview?: boolean;
 }
 
-export function MenuSection({ categories, preview = false }: MenuSectionProps) {
+export function MenuSection({ categories, settings, preview = false }: MenuSectionProps) {
   const signature = categories.find((c) => c.is_signature);
   const defaultTab = signature?.slug ?? categories[0]?.slug ?? "nyama-choma";
   const displayCategories = preview ? categories.slice(0, 3) : categories;
@@ -60,7 +61,7 @@ export function MenuSection({ categories, preview = false }: MenuSectionProps) {
                       </span>
                     </div>
                     <Button asChild size="sm" variant="whatsapp" className="w-full text-xs">
-                      <a href={generateWhatsAppOrderUrl(item.name)} target="_blank" rel="noopener noreferrer">
+                      <a href={generateWhatsAppOrderUrl(item.name, settings.phone_primary)} target="_blank" rel="noopener noreferrer">
                         <MessageCircle className="h-3 w-3 mr-1" /> Order on WhatsApp
                       </a>
                     </Button>
@@ -108,7 +109,7 @@ export function MenuSection({ categories, preview = false }: MenuSectionProps) {
                     
                     <div className="mt-4 pt-4 border-t border-palm/5">
                       <Button asChild size="sm" variant="whatsapp" className="w-full">
-                        <a href={generateWhatsAppOrderUrl(item.name)} target="_blank" rel="noopener noreferrer">
+                        <a href={generateWhatsAppOrderUrl(item.name, settings.phone_primary)} target="_blank" rel="noopener noreferrer">
                           <MessageCircle className="h-4 w-4 mr-2" /> Order via WhatsApp
                         </a>
                       </Button>
@@ -127,7 +128,7 @@ export function MenuSection({ categories, preview = false }: MenuSectionProps) {
             </Button>
           )}
           <Button asChild variant="whatsapp">
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+            <a href={generateWhatsAppUrl(settings.phone_primary)} target="_blank" rel="noopener noreferrer">
               Order via WhatsApp
             </a>
           </Button>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getMenuCategories } from "@/lib/data";
+import { getMenuCategories, getSiteSettings } from "@/lib/data";
 import { MenuSection } from "@/components/sections/menu-section";
 
 export const metadata: Metadata = {
@@ -9,11 +9,14 @@ export const metadata: Metadata = {
 };
 
 export default async function MenuPage() {
-  const categories = await getMenuCategories();
+  const [categories, settings] = await Promise.all([
+    getMenuCategories(),
+    getSiteSettings()
+  ]);
 
   return (
     <div className="pt-24">
-      <MenuSection categories={categories} />
+      <MenuSection categories={categories} settings={settings} />
     </div>
   );
 }

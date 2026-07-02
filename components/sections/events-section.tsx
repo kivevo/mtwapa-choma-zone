@@ -17,8 +17,8 @@ import { AnimatedSection } from "@/components/ui/animated-section";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { EventInquiryForm } from "@/components/forms/event-inquiry-form";
 import { Button } from "@/components/ui/button";
-import { WHATSAPP_URL } from "@/lib/utils";
-import type { EventType } from "@/types/database.types";
+import { generateWhatsAppUrl } from "@/lib/utils";
+import type { EventType, SiteSettings } from "@/types/database.types";
 
 const ICON_MAP: Record<string, LucideIcon> = {
   cake: Cake,
@@ -35,9 +35,10 @@ const ICON_MAP: Record<string, LucideIcon> = {
 
 interface EventsSectionProps {
   eventTypes: EventType[];
+  settings: SiteSettings;
 }
 
-export function EventsSection({ eventTypes }: EventsSectionProps) {
+export function EventsSection({ eventTypes, settings }: EventsSectionProps) {
   return (
     <AnimatedSection id="events" className="bg-white py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -81,7 +82,7 @@ export function EventsSection({ eventTypes }: EventsSectionProps) {
               quickly. For faster response, WhatsApp us directly.
             </p>
             <Button asChild variant="whatsapp" className="mt-6">
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+              <a href={generateWhatsAppUrl(settings.phone_primary)} target="_blank" rel="noopener noreferrer">
                 Prefer to chat? WhatsApp us
               </a>
             </Button>

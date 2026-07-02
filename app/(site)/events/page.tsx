@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getEventTypes } from "@/lib/data";
+import { getEventTypes, getSiteSettings } from "@/lib/data";
 import { EventsSection } from "@/components/sections/events-section";
 
 export const metadata: Metadata = {
@@ -9,11 +9,14 @@ export const metadata: Metadata = {
 };
 
 export default async function EventsPage() {
-  const eventTypes = await getEventTypes();
+  const [eventTypes, settings] = await Promise.all([
+    getEventTypes(),
+    getSiteSettings()
+  ]);
 
   return (
     <div className="pt-24">
-      <EventsSection eventTypes={eventTypes} />
+      <EventsSection eventTypes={eventTypes} settings={settings} />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X, Phone, MessageCircle, CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn, NAV_LINKS, WHATSAPP_URL, resolveImageUrl } from "@/lib/utils";
+import { cn, NAV_LINKS, generateWhatsAppUrl, resolveImageUrl } from "@/lib/utils";
 import { formatPhoneDisplay, formatPhoneForTel } from "@/lib/utils";
 import { ReservationModal } from "@/components/sections/reservation-modal";
 import type { SiteSettings } from "@/types/database.types";
@@ -125,7 +125,7 @@ export function Header({ settings }: HeaderProps) {
                 <CalendarDays className="h-4 w-4" /> Book a Table
               </Button>
               <Button asChild variant="whatsapp" className="w-full justify-center">
-                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                <a href={generateWhatsAppUrl(settings.phone_primary)} target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
                 </a>
               </Button>

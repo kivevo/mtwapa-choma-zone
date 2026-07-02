@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { MessageCircle, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { formatPhoneDisplay, formatPhoneForTel, WHATSAPP_URL } from "@/lib/utils";
+import { formatPhoneDisplay, formatPhoneForTel, generateWhatsAppUrl } from "@/lib/utils";
 
 interface ContactButtonsProps {
   phone: string;
@@ -32,7 +32,7 @@ export function ContactButtons({
         </a>
       </Button>
       <Button asChild variant="whatsapp" size={size}>
-        <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+        <a href={generateWhatsAppUrl(phone)} target="_blank" rel="noopener noreferrer">
           <MessageCircle className="h-4 w-4" />
           WhatsApp
         </a>
@@ -44,13 +44,15 @@ export function ContactButtons({
 export function WhatsAppLink({
   children,
   className,
+  phone,
 }: {
   children: React.ReactNode;
   className?: string;
+  phone: string;
 }) {
   return (
     <Link
-      href={WHATSAPP_URL}
+      href={generateWhatsAppUrl(phone)}
       target="_blank"
       rel="noopener noreferrer"
       className={className}
