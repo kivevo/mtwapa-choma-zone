@@ -66,11 +66,15 @@ export function generateWhatsAppOrderUrl(itemName: string, phoneStr: string): st
   return `https://wa.me/${basePhone}?text=${encodeURIComponent(message)}`;
 }
 
-export const GOOGLE_MAPS_EMBED =
-  "https://maps.google.com/maps?q=-3.943549,39.745274&z=16&output=embed";
+export function generateGoogleMapsEmbed(lat: number, lng: number): string {
+  if (!lat || !lng) return "https://maps.google.com/maps?q=-3.943549,39.745274&z=16&output=embed";
+  return `https://maps.google.com/maps?q=${lat},${lng}&z=16&output=embed`;
+}
 
-export const GOOGLE_MAPS_DIRECTIONS =
-  "https://www.google.com/maps/search/?api=1&query=Choma+Zone+Mtwapa+Palms&query_place_id=ChIJH9J-1GcJQBgRsgp0tmZBpBY";
+export function generateGoogleMapsDirections(placeId: string, query: string = "Choma Zone Mtwapa Palms"): string {
+  if (!placeId) return "https://www.google.com/maps/search/?api=1&query=Choma+Zone+Mtwapa+Palms&query_place_id=ChIJH9J-1GcJQBgRsgp0tmZBpBY";
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}&query_place_id=${placeId}`;
+}
 
 
 export const NAV_LINKS = [

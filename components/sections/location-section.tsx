@@ -5,7 +5,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { ContactForm } from "@/components/forms/contact-form";
 import { ContactButtons } from "@/components/contact-buttons";
 import { Button } from "@/components/ui/button";
-import { GOOGLE_MAPS_DIRECTIONS, GOOGLE_MAPS_EMBED } from "@/lib/utils";
+import { generateGoogleMapsDirections, generateGoogleMapsEmbed } from "@/lib/utils";
 import { MapPin, Mail, Clock } from "lucide-react";
 import { formatPhoneDisplay } from "@/lib/utils";
 import type { SiteSettings } from "@/types/database.types";
@@ -83,7 +83,7 @@ export function LocationSection({ settings }: LocationSectionProps) {
           <div>
             <div className="overflow-hidden rounded-3xl shadow-lg">
               <iframe
-                src={GOOGLE_MAPS_EMBED}
+                src={generateGoogleMapsEmbed(settings.latitude || 0, settings.longitude || 0)}
                 width="100%"
                 height="450"
                 style={{ border: 0 }}
@@ -95,7 +95,7 @@ export function LocationSection({ settings }: LocationSectionProps) {
             </div>
             <Button asChild className="mt-4 w-full" size="lg">
               <a
-                href={GOOGLE_MAPS_DIRECTIONS}
+                href={generateGoogleMapsDirections(settings.google_place_id || "")}
                 target="_blank"
                 rel="noopener noreferrer"
               >
