@@ -92,41 +92,56 @@ export function Header({ settings }: HeaderProps) {
             </Button>
           </div>
 
-          <button
-            type="button"
-            className="rounded-lg p-2 text-sand transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold lg:hidden"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle menu"
-          >
-            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+          {/* Mobile: phone icon + hamburger */}
+          <div className="flex items-center gap-1 lg:hidden">
+            <a
+              href={`tel:${formatPhoneForTel(settings.phone_primary)}`}
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-sand transition-colors hover:bg-ember"
+              aria-label="Call us"
+            >
+              <Phone className="h-5 w-5" />
+            </a>
+            <button
+              type="button"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-sand transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="Toggle menu"
+            >
+              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile menu — full dropdown */}
         <div
           className={cn(
-            "absolute inset-x-0 top-full overflow-hidden bg-charcoal/95 backdrop-blur-md transition-all duration-300 lg:hidden",
-            isOpen ? "max-h-96 border-t border-white/10" : "max-h-0"
+            "absolute inset-x-0 top-full overflow-hidden bg-charcoal/98 backdrop-blur-md transition-all duration-300 lg:hidden",
+            isOpen ? "max-h-[32rem] border-t border-white/10" : "max-h-0"
           )}
         >
-          <nav className="flex flex-col px-4 pb-6 pt-2 sm:px-6">
+          <nav className="flex flex-col px-4 pb-6 pt-3 sm:px-6">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="block py-3 text-base font-medium text-sand/90 transition-colors hover:text-gold"
+                className="flex items-center border-b border-white/5 py-4 text-base font-medium text-sand/90 transition-colors hover:text-gold"
                 onClick={() => setIsOpen(false)}
               >
                 {link.label}
               </Link>
             ))}
-            <div className="mt-4 flex flex-col gap-3">
-              <Button onClick={() => { setIsOpen(false); setShowReservation(true); }} className="w-full bg-ember hover:bg-ember/90 gap-2">
-                <CalendarDays className="h-4 w-4" /> Book a Table
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <Button
+                onClick={() => { setIsOpen(false); setShowReservation(true); }}
+                className="w-full bg-ember hover:bg-ember/90 text-white gap-2 py-5 text-sm font-semibold"
+              >
+                <CalendarDays className="h-4 w-4" />
+                Book Table
               </Button>
-              <Button asChild variant="whatsapp" className="w-full justify-center">
+              <Button asChild variant="whatsapp" className="w-full justify-center py-5 text-sm font-semibold">
                 <a href={generateWhatsAppUrl(settings.phone_primary)} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
+                  <MessageCircle className="h-4 w-4" />
+                  WhatsApp
                 </a>
               </Button>
             </div>

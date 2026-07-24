@@ -122,43 +122,45 @@ export function About({ settings }: AboutProps) {
         </div>
 
         {/* Feature cards with glow on hover */}
-        <div className="mt-16 grid gap-8 md:grid-cols-3">
+        <div className="mt-12 grid gap-4 sm:gap-8 md:grid-cols-3">
           {features.map((feature, i) => (
             <div
               key={feature.title}
-              className="group rounded-3xl border border-palm/10 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-ember/20 hover:shadow-xl hover:shadow-ember/10 hover:ring-1 hover:ring-ember/20"
+              className="group rounded-2xl border border-palm/10 bg-white p-5 sm:p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-ember/20 hover:shadow-xl hover:shadow-ember/10 hover:ring-1 hover:ring-ember/20"
               style={{ animationDelay: `${i * 0.1}s` }}
             >
-              <div className="mb-4 inline-flex rounded-2xl bg-palm/10 p-3 text-palm transition-colors group-hover:bg-ember group-hover:text-sand">
-                <feature.icon className="h-7 w-7" />
+              <div className="mb-3 inline-flex rounded-xl bg-palm/10 p-2.5 text-palm transition-colors group-hover:bg-ember group-hover:text-sand sm:mb-4 sm:rounded-2xl sm:p-3">
+                <feature.icon className="h-6 w-6 sm:h-7 sm:w-7" />
               </div>
-              <h3 className="font-display text-xl font-bold text-charcoal">
+              <h3 className="font-display text-lg font-bold text-charcoal sm:text-xl">
                 {feature.title}
               </h3>
-              <p className="mt-2 text-charcoal/70">{feature.description}</p>
+              <p className="mt-2 text-sm text-charcoal/70 sm:text-base">{feature.description}</p>
             </div>
           ))}
         </div>
 
         {/* Animated stats bar */}
-        <div className="mt-16 grid grid-cols-3 gap-4 overflow-hidden rounded-3xl bg-gradient-to-br from-palm via-palm to-palm/80 p-6 text-center text-sand shadow-lg md:gap-12 md:p-12">
-          <div ref={yearsRef}>
-            <p className="font-display text-2xl font-bold text-gold sm:text-3xl md:text-4xl">
-              {yearsCount}+
-            </p>
-            <p className="mt-1 text-xs text-sand/80 sm:text-sm">Years Serving Mtwapa</p>
-          </div>
-          <div ref={parkingRef}>
-            <p className="font-display text-2xl font-bold text-gold sm:text-3xl md:text-4xl">
-              {parkingCount}+
-            </p>
-            <p className="mt-1 text-xs text-sand/80 sm:text-sm">Parking Spaces</p>
-          </div>
-          <div>
-            <p className="font-display text-lg font-bold text-gold sm:text-2xl md:text-3xl">
-              {settings.stat_happy_customers ?? "Thousands"}
-            </p>
-            <p className="mt-1 text-xs text-sand/80 sm:text-sm">Happy Choma Lovers</p>
+        <div className="mt-12 overflow-hidden rounded-3xl bg-gradient-to-br from-palm via-palm to-palm/80 shadow-lg">
+          <div className="grid grid-cols-3 divide-x divide-white/10">
+            <div ref={yearsRef} className="p-5 text-center sm:p-8 md:p-12">
+              <p className="font-display text-3xl font-bold text-gold sm:text-4xl">
+                {yearsCount}+
+              </p>
+              <p className="mt-1 text-[10px] leading-tight text-sand/80 sm:text-sm">Years Serving Mtwapa</p>
+            </div>
+            <div ref={parkingRef} className="p-5 text-center sm:p-8 md:p-12">
+              <p className="font-display text-3xl font-bold text-gold sm:text-4xl">
+                {parkingCount}+
+              </p>
+              <p className="mt-1 text-[10px] leading-tight text-sand/80 sm:text-sm">Parking Spaces</p>
+            </div>
+            <div className="p-5 text-center sm:p-8 md:p-12">
+              <p className="font-display text-2xl font-bold text-gold sm:text-3xl md:text-4xl">
+                {settings.stat_happy_customers ?? "1000s"}
+              </p>
+              <p className="mt-1 text-[10px] leading-tight text-sand/80 sm:text-sm">Happy Choma Lovers</p>
+            </div>
           </div>
         </div>
       </div>

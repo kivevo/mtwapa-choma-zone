@@ -106,7 +106,7 @@ export function SocialShowcaseSection({ settings }: SocialShowcaseSectionProps) 
         </div>
 
         {/* Real Photo Social Grid */}
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
           {posts.map((post, i) => (
             <a
               key={i}
@@ -146,12 +146,12 @@ export function SocialShowcaseSection({ settings }: SocialShowcaseSectionProps) 
         </div>
 
         {/* CTA */}
-        <div className="mt-10 text-center">
+        <div className="mt-8 text-center">
           <a
             href={instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 rounded-full border border-ember bg-ember/10 px-8 py-3 text-sm font-semibold text-sand transition-all hover:bg-ember hover:text-white"
+            className="inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-ember bg-ember/10 px-8 py-4 text-sm font-semibold text-sand transition-all hover:bg-ember hover:text-white sm:w-auto sm:py-3"
           >
             <InstagramIcon className="h-4 w-4 text-ember group-hover:text-white" />
             Follow @mtwapapalms on Instagram

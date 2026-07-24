@@ -60,13 +60,13 @@ export function GallerySection({
           description="Take a look at our open garden seating, charcoal grills, kids' playground, and real moments shared with our guests."
         />
 
-        <div className="mb-8 flex flex-wrap justify-center gap-2">
+        <div className="mb-8 flex w-full overflow-x-auto pb-4 hide-scrollbar justify-start sm:justify-center gap-2">
           {filterCategories.map((cat) => (
             <button
               key={cat.slug}
               type="button"
               onClick={() => setActiveCategory(cat.slug)}
-              className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
+              className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-all ${
                 activeCategory === cat.slug
                   ? "bg-ember text-sand shadow-ember"
                   : "bg-white text-charcoal/70 hover:bg-palm/10"
@@ -182,7 +182,7 @@ export function GallerySection({
                 e.stopPropagation();
                 navigate(-1);
               }}
-              className="absolute left-4 z-10 rounded-full bg-white/10 p-2 text-sand"
+              className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2 text-sand md:left-4 hover:bg-white/20 transition-colors"
               aria-label="Previous"
             >
               <ChevronLeft className="h-6 w-6" />
@@ -193,7 +193,7 @@ export function GallerySection({
                 e.stopPropagation();
                 navigate(1);
               }}
-              className="absolute right-4 top-16 z-10 rounded-full bg-white/10 p-2 text-sand md:right-16 md:top-1/2 md:-translate-y-1/2"
+              className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2 text-sand md:right-4 hover:bg-white/20 transition-colors"
               aria-label="Next"
             >
               <ChevronRight className="h-6 w-6" />

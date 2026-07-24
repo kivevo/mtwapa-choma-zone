@@ -31,7 +31,7 @@ export function MenuSection({ categories, settings, preview = false }: MenuSecti
         />
 
         {signature && (
-          <div className="relative mb-12 overflow-hidden rounded-3xl bg-charcoal p-8 md:p-12">
+          <div className="relative mb-12 overflow-hidden rounded-3xl bg-charcoal p-6 sm:p-8 md:p-12">
             <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-ember/20 blur-3xl" />
             <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <div>
@@ -121,13 +121,13 @@ export function MenuSection({ categories, settings, preview = false }: MenuSecti
           ))}
         </Tabs>
 
-        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
           {preview && (
-            <Button asChild variant="secondary">
+            <Button asChild variant="secondary" className="w-full sm:w-auto">
               <Link href="/menu">View Full Menu</Link>
             </Button>
           )}
-          <Button asChild variant="whatsapp">
+          <Button asChild variant="whatsapp" className="w-full sm:w-auto">
             <a href={generateWhatsAppUrl(settings.phone_primary)} target="_blank" rel="noopener noreferrer">
               Order via WhatsApp
             </a>

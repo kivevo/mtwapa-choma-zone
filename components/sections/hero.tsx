@@ -122,11 +122,11 @@ export function Hero({ settings }: HeroProps) {
               "Freshly roasted goat & beef, cold drinks, and open-air garden seating right on the Mombasa–Malindi Highway. Stop by for lunch, bring the family on Sunday, or pull in for a quick highway break."}
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5 sm:mt-10 sm:gap-4">
-            <Button onClick={() => setShowReservation(true)} size="lg" className="bg-ember hover:bg-ember/90 text-white font-semibold shadow-md px-6">
+          <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4">
+            <Button onClick={() => setShowReservation(true)} size="lg" className="w-full bg-ember hover:bg-ember/90 text-white font-semibold shadow-md sm:w-auto px-8">
               Book a Table
             </Button>
-            <Button asChild variant="outline" size="lg" className="text-sand border-sand/40 hover:bg-white/10 hover:text-white px-6">
+            <Button asChild variant="outline" size="lg" className="w-full text-sand border-sand/40 hover:bg-white/10 hover:text-white sm:w-auto px-8">
               <Link href="/#menu">View Menu</Link>
             </Button>
           </div>
@@ -140,7 +140,7 @@ export function Hero({ settings }: HeroProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="mx-auto mt-10 inline-flex max-w-xl flex-col gap-2 rounded-2xl border border-white/10 bg-charcoal/70 px-4 py-3.5 backdrop-blur-md sm:mt-16 sm:flex-row sm:items-center sm:gap-6 sm:px-6 sm:py-4 text-left sm:text-center"
+          className="mx-auto mt-8 inline-flex max-w-xl flex-col gap-3 rounded-2xl border border-white/10 bg-charcoal/70 px-4 py-3.5 backdrop-blur-md sm:mt-16 sm:flex-row sm:items-center sm:gap-6 sm:px-6 sm:py-4 text-left"
         >
           <div className="flex items-center gap-2 text-xs sm:text-sm text-sand/80">
             <MapPin className="h-4 w-4 shrink-0 text-ember" />
@@ -162,7 +162,7 @@ export function Hero({ settings }: HeroProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2, duration: 0.6 }}
-        className="absolute bottom-28 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-sand/40 transition-colors hover:text-sand"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-sand/40 transition-colors hover:text-sand sm:bottom-28"
         aria-label="Scroll down"
       >
         <motion.div
