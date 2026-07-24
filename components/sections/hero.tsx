@@ -20,22 +20,36 @@ const HERO_SLIDES = [
     title_highlight: "Nyama Choma",
     title_suffix: "Open Garden Hospitality",
     description: "Freshly roasted goat & beef, cold drinks, and open-air garden seating right on the Mombasa–Malindi Highway.",
-    image: "/images/real/insta_real_4.jpg", // Real venue exterior — clean sky & signage
+    image: "/images/real/insta_real_4.jpg",
+  },
+  {
+    title_prefix: "Your Perfect",
+    title_highlight: "Highway Stopover",
+    title_suffix: "Mombasa–Malindi Highway",
+    description: "Opposite Galana Petrol Station. Secure parking, clean washrooms, hot food, and cold drinks — get back on the road refreshed.",
+    image: "/images/real/insta_real_5.jpg",
   },
   {
     title_prefix: "Sundays are for",
     title_highlight: "Family Fun",
-    title_suffix: "At the Palms",
-    description: "Bring the whole family for our Sunday Fun Day. Great choma for you, a safe fenced playground for the kids.",
-    image: "/images/real/insta_real_5.jpg", // Real venue exterior — different angle
+    title_suffix: "Food · Play · Memories",
+    description: "Bring the whole family. Great choma for you, a safe fenced playground for the kids, and Sunday vibes all day long.",
+    image: "/images/real/insta_real_7.jpg",
   },
   {
-    title_prefix: "The Perfect",
-    title_highlight: "Garden Escape",
-    title_suffix: "Events & Meetups",
-    description: "Lush makuti pavilions, secure parking, and live Rhumba nights. Your favourite spot on the North Coast.",
-    image: "/images/real/insta_real_9.jpg", // Garden dining with real ambience
-  }
+    title_prefix: "Great Choma,",
+    title_highlight: "Cold Drinks",
+    title_suffix: "& Even Better Vibes",
+    description: "Nyama choma done right. Tusker on ice, pool table, garden seating, and live music every weekend at the Palms.",
+    image: "/images/real/insta_real_2.jpg",
+  },
+  {
+    title_prefix: "Host Your Next",
+    title_highlight: "Event With Us",
+    title_suffix: "Birthdays · Meetings · Celebrations",
+    description: "From birthday parties to corporate luncheons — our lush garden and makuti pavilions set the perfect scene.",
+    image: "/images/real/insta_real_8.jpg",
+  },
 ];
 
 function useIsOpen(hours: SiteSettings["opening_hours"]) {
@@ -174,19 +188,6 @@ export function Hero({ settings }: HeroProps) {
               <ContactButtons phone={settings.phone_primary} variant="dark" className="justify-center w-full xs:w-auto" />
             </div>
 
-            {/* Pagination Dots */}
-            <div className="mt-8 flex justify-center gap-2">
-              {HERO_SLIDES.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrentSlide(idx)}
-                  className={`h-2 rounded-full transition-all ${
-                    idx === currentSlide ? "w-6 bg-ember" : "w-2 bg-sand/30 hover:bg-sand/60"
-                  }`}
-                  aria-label={`Go to slide ${idx + 1}`}
-                />
-              ))}
-            </div>
           </motion.div>
 
           <motion.div
