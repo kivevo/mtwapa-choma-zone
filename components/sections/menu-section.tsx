@@ -121,13 +121,13 @@ export function MenuSection({ categories, settings, preview = false }: MenuSecti
           ))}
         </Tabs>
 
-        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
           {preview && (
-            <Button asChild variant="secondary" className="w-full sm:w-auto">
+            <Button asChild variant="secondary" className="px-6 py-5 sm:py-4">
               <Link href="/menu">View Full Menu</Link>
             </Button>
           )}
-          <Button asChild variant="whatsapp" className="w-full sm:w-auto">
+          <Button asChild variant="whatsapp" className="px-6 py-5 sm:py-4">
             <a href={generateWhatsAppUrl(settings.phone_primary)} target="_blank" rel="noopener noreferrer">
               Order via WhatsApp
             </a>

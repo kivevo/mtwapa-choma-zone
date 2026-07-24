@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Menu, X, Phone, MessageCircle, CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,9 @@ export function Header({ settings }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [showReservation, setShowReservation] = useState(false);
 
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -29,7 +33,7 @@ export function Header({ settings }: HeaderProps) {
       <header
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-          scrolled
+          (scrolled || isOpen || !isHome)
             ? "bg-charcoal/95 shadow-lg backdrop-blur-md"
             : "bg-gradient-to-b from-charcoal/80 to-transparent"
         )}

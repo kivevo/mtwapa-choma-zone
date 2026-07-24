@@ -117,16 +117,16 @@ export function Hero({ settings }: HeroProps) {
               {settings.frontend_content?.hero_title_suffix || "Open Garden Hospitality"}
             </span>
           </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-sm sm:text-base md:text-lg leading-relaxed text-sand/85 sm:mt-6">
+          <p className="mx-auto mt-4 max-w-3xl text-base sm:text-lg md:text-xl leading-relaxed text-sand/90 sm:mt-8">
             {settings.frontend_content?.hero_description ||
               "Freshly roasted goat & beef, cold drinks, and open-air garden seating right on the Mombasa–Malindi Highway. Stop by for lunch, bring the family on Sunday, or pull in for a quick highway break."}
           </p>
 
-          <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4">
-            <Button onClick={() => setShowReservation(true)} size="lg" className="w-full bg-ember hover:bg-ember/90 text-white font-semibold shadow-md sm:w-auto px-8">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-4 sm:mt-12 sm:gap-6">
+            <Button onClick={() => setShowReservation(true)} className="bg-ember hover:bg-ember/90 text-white font-semibold shadow-md px-8 py-6 text-base rounded-full sm:py-6">
               Book a Table
             </Button>
-            <Button asChild variant="outline" size="lg" className="w-full text-sand border-sand/40 hover:bg-white/10 hover:text-white sm:w-auto px-8">
+            <Button asChild variant="outline" className="text-sand border-sand/40 hover:bg-white/10 hover:text-white px-8 py-6 text-base rounded-full sm:py-6">
               <Link href="/#menu">View Menu</Link>
             </Button>
           </div>
