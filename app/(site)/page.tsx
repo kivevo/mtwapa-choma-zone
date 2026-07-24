@@ -12,7 +12,6 @@ import { Hero } from "@/components/sections/hero";
 import { About } from "@/components/sections/about";
 import { MenuSection } from "@/components/sections/menu-section";
 import { GallerySection } from "@/components/sections/gallery-section";
-import { VideoShowcase } from "@/components/sections/video-showcase";
 import { EventsSection } from "@/components/sections/events-section";
 import { FamilyFunSection } from "@/components/sections/family-fun";
 import { StopoverSection } from "@/components/sections/stopover";
@@ -44,7 +43,6 @@ export default async function HomePage() {
 
   const supabaseUrl = getSupabasePublicUrl();
   const photos = galleryImages.filter((img) => img.media_type !== "video");
-  const videos = galleryImages.filter((img) => img.media_type === "video");
 
   return (
     <>
@@ -59,7 +57,6 @@ export default async function HomePage() {
         settings={settings}
         preview
       />
-      <VideoShowcase videos={videos} supabaseUrl={supabaseUrl} />
       <EventsSection eventTypes={eventTypes} settings={settings} />
       <FamilyFunSection settings={settings} />
       <StopoverSection settings={settings} />

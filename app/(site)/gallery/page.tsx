@@ -6,7 +6,6 @@ import {
   getGalleryCategories,
 } from "@/lib/data";
 import { GallerySection } from "@/components/sections/gallery-section";
-import { VideoShowcase } from "@/components/sections/video-showcase";
 
 export const metadata: Metadata = {
   title: "Gallery",
@@ -22,7 +21,6 @@ export default async function GalleryPage() {
   ]);
   const supabaseUrl = getSupabasePublicUrl();
   const photos = images.filter((img) => img.media_type !== "video");
-  const videos = images.filter((img) => img.media_type === "video");
 
   return (
     <div className="pt-24">
@@ -32,7 +30,6 @@ export default async function GalleryPage() {
         supabaseUrl={supabaseUrl}
         settings={settings}
       />
-      <VideoShowcase videos={videos} supabaseUrl={supabaseUrl} />
     </div>
   );
 }
