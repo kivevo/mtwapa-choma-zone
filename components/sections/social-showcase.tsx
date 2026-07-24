@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { InstagramIcon, FacebookIcon, TikTokIcon } from "@/components/icons/social-icons";
 import type { SiteSettings } from "@/types/database.types";
@@ -10,61 +11,67 @@ interface SocialShowcaseSectionProps {
 
 const posts = [
   {
-    emoji: "🔥",
-    caption: "Nyama Choma perfection every single time. 🔥 Come through!",
-    likes: "1.2K",
-    bg: "from-orange-400 to-red-500",
+    image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80",
+    alt: "Nyama Choma platter",
+    caption: "Fresh mbuzi choma sizzling hot off the coals. Served with kachumbari & ugali.",
+    likes: "482",
+    handle: "@mtwapapalms",
   },
   {
-    emoji: "🌴",
-    caption: "Sundowners in the garden 🌴 What a vibe! Every Friday from 5PM.",
-    likes: "892",
-    bg: "from-emerald-400 to-teal-600",
+    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80",
+    alt: "Garden dining area",
+    caption: "Sunset in the garden. Perfect spot to unwind after a long drive.",
+    likes: "329",
+    handle: "@mtwapapalms",
   },
   {
-    emoji: "🎉",
-    caption: "Events done right! Book your next celebration with us. 🎊",
-    likes: "2.1K",
-    bg: "from-purple-400 to-pink-500",
+    image: "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=800&q=80",
+    alt: "Cold drinks at bar",
+    caption: "Cold drinks & good tunes. Join us for happy hour daily from 4PM.",
+    likes: "615",
+    handle: "@mtwapapalms",
   },
   {
-    emoji: "🍖",
-    caption: "That slow-roasted coastal flavour. Goat choma on the grill! 🍖",
-    likes: "3.4K",
-    bg: "from-yellow-400 to-orange-500",
+    image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80",
+    alt: "Open air grill",
+    caption: "Weekend vibes loading! Fire is lit, meat is ready.",
+    likes: "841",
+    handle: "@mtwapapalms",
   },
   {
-    emoji: "👨‍👩‍👧‍👦",
-    caption: "Family Fun Day every Sunday! Kids love it here 💛 Come make memories.",
-    likes: "1.7K",
-    bg: "from-sky-400 to-blue-600",
+    image: "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=800&q=80",
+    alt: "Kids play area",
+    caption: "Family Fun Sunday! Kids having fun in the playground while parents enjoy choma.",
+    likes: "512",
+    handle: "@mtwapapalms",
   },
   {
-    emoji: "🌅",
-    caption: "Golden hour at Choma Zone. The best view on the highway 🌅✨",
-    likes: "4.1K",
-    bg: "from-amber-300 to-rose-400",
+    image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800&q=80",
+    alt: "Coffee stopover",
+    caption: "Quick coffee & snack break on the Mombasa–Malindi Highway.",
+    likes: "294",
+    handle: "@mtwapapalms",
   },
 ];
 
 export function SocialShowcaseSection({ settings }: SocialShowcaseSectionProps) {
-  const instagramUrl = settings.instagram_url || "https://www.instagram.com";
-  const facebookUrl = settings.facebook_url || "https://www.facebook.com";
-  const tiktokUrl = settings.tiktok_url || "https://www.tiktok.com";
+  const instagramUrl = settings.instagram_url || "https://www.instagram.com/mtwapapalms";
+  const facebookUrl = settings.facebook_url || "https://www.facebook.com/ChomaZoneMtwapaPalm";
+  const tiktokUrl = settings.tiktok_url || "https://www.tiktok.com/@chomazonemtwapa";
 
   return (
     <AnimatedSection className="bg-charcoal py-20 lg:py-28 overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-12 text-center">
-          <p className="mb-3 inline-block rounded-full border border-ember/30 bg-ember/10 px-4 py-1.5 text-sm font-semibold uppercase tracking-widest text-ember">
-            Follow the Vibe
+          <p className="mb-3 inline-block rounded-full border border-ember/30 bg-ember/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-ember">
+            Connect With Us
           </p>
           <h2 className="font-display text-3xl font-bold text-sand sm:text-4xl lg:text-5xl">
-            We&apos;re on Social Media
+            Follow Us on Social Media
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-sand/60">
-            Join thousands of food lovers following us for daily specials, events, and behind-the-scenes action at Choma Zone.
+          <p className="mx-auto mt-4 max-w-xl text-sand/70 text-base">
+            Check out our latest photos, upcoming weekend events, and real moments from Choma Zone Mtwapa Palms.
           </p>
           {/* Social handles */}
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
@@ -72,7 +79,7 @@ export function SocialShowcaseSection({ settings }: SocialShowcaseSectionProps) 
               href={instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-sand transition-all hover:border-ember hover:bg-ember hover:text-white"
+              className="group flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-sand transition-all hover:border-ember hover:bg-ember hover:text-white"
             >
               <InstagramIcon className="h-4 w-4 transition-transform group-hover:scale-110" />
               Instagram
@@ -81,7 +88,7 @@ export function SocialShowcaseSection({ settings }: SocialShowcaseSectionProps) 
               href={facebookUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-sand transition-all hover:border-[#1877f2] hover:bg-[#1877f2] hover:text-white"
+              className="group flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-sand transition-all hover:border-[#1877f2] hover:bg-[#1877f2] hover:text-white"
             >
               <FacebookIcon className="h-4 w-4 transition-transform group-hover:scale-110" />
               Facebook
@@ -90,7 +97,7 @@ export function SocialShowcaseSection({ settings }: SocialShowcaseSectionProps) 
               href={tiktokUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-sand transition-all hover:border-white hover:bg-white hover:text-charcoal"
+              className="group flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-sand transition-all hover:border-white hover:bg-white hover:text-charcoal"
             >
               <TikTokIcon className="h-4 w-4 transition-transform group-hover:scale-110" />
               TikTok
@@ -98,7 +105,7 @@ export function SocialShowcaseSection({ settings }: SocialShowcaseSectionProps) 
           </div>
         </div>
 
-        {/* Mock Instagram Grid */}
+        {/* Real Photo Social Grid */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
           {posts.map((post, i) => (
             <a
@@ -106,28 +113,33 @@ export function SocialShowcaseSection({ settings }: SocialShowcaseSectionProps) 
               href={instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative aspect-square overflow-hidden rounded-2xl"
+              className="group relative aspect-square overflow-hidden rounded-2xl bg-charcoal/50 border border-white/10"
             >
-              {/* Gradient background */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${post.bg} opacity-90 transition-opacity group-hover:opacity-100`}
+              <Image
+                src={post.image}
+                alt={post.alt}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
               />
-              {/* Emoji centered */}
-              <div className="absolute inset-0 flex items-center justify-center text-5xl drop-shadow-lg transition-transform group-hover:scale-110">
-                {post.emoji}
+              
+              {/* Permanent subtle gradient for contrast */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity" />
+
+              {/* Instagram icon badge */}
+              <div className="absolute right-2.5 top-2.5 z-10 rounded-full bg-black/60 p-1.5 backdrop-blur-md border border-white/20 text-white">
+                <InstagramIcon className="h-3.5 w-3.5" />
               </div>
-              {/* Overlay on hover */}
-              <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/70 via-black/20 to-transparent p-3 opacity-0 transition-all duration-300 group-hover:opacity-100">
-                <p className="text-xs font-medium leading-snug text-white line-clamp-2">
+
+              {/* Hover overlay content */}
+              <div className="absolute inset-0 z-10 flex flex-col justify-end p-3 text-left">
+                <p className="text-xs font-semibold text-gold mb-0.5">{post.handle}</p>
+                <p className="text-xs font-normal leading-snug text-white line-clamp-2 drop-shadow">
                   {post.caption}
                 </p>
-                <p className="mt-1 text-xs text-white/70">❤️ {post.likes} likes</p>
-              </div>
-              {/* Instagram icon badge */}
-              <div className="absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100">
-                <div className="rounded-full bg-black/50 p-1.5 backdrop-blur-sm">
-                  <InstagramIcon className="h-3 w-3 text-white" />
-                </div>
+                <p className="mt-1.5 text-[11px] font-medium text-sand/80 flex items-center gap-1">
+                  <span>❤️</span> {post.likes} likes
+                </p>
               </div>
             </a>
           ))}
@@ -139,14 +151,11 @@ export function SocialShowcaseSection({ settings }: SocialShowcaseSectionProps) 
             href={instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 rounded-full border border-ember bg-transparent px-8 py-3 font-semibold text-ember transition-all hover:bg-ember hover:text-white"
+            className="inline-flex items-center gap-2.5 rounded-full border border-ember bg-ember/10 px-8 py-3 text-sm font-semibold text-sand transition-all hover:bg-ember hover:text-white"
           >
-            <InstagramIcon className="h-5 w-5" />
-            Follow @chomazonemtwapa
+            <InstagramIcon className="h-4 w-4 text-ember group-hover:text-white" />
+            Follow @mtwapapalms on Instagram
           </a>
-          <p className="mt-3 text-xs text-sand/40">
-            Tag us in your visit with <span className="text-ember">#ChomaZoneMtwapa</span>
-          </p>
         </div>
       </div>
     </AnimatedSection>
