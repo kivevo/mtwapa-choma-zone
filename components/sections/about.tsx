@@ -35,15 +35,25 @@ export function About({ settings }: AboutProps) {
     <AnimatedSection id="about" className="bg-sand py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Our Story"
-          title={settings.frontend_content?.about_title || "More Than a Restaurant — A Coastal Institution"}
-          description={settings.frontend_content?.about_p1 || "Right on the Mombasa–Malindi Highway, opposite Galana Petrol Station, Choma Zone Mtwapa Palms is where families gather for Sunday lunch, travelers stop for coffee and choma, and friends meet for sundowners as the grill fires up at dusk."}
+          eyebrow="About Us"
+          title={settings.frontend_content?.about_title || "Welcome to Choma Zone Mtwapa Palms"}
+          description={
+            settings.frontend_content?.about_p1 ||
+            "Right on the Mombasa–Malindi Highway, opposite Galana Petrol Station, Choma Zone Mtwapa Palms is where families come together for Sunday lunch, travelers stop for a quick bite, and friends meet up for drinks and fresh choma."
+          }
         />
 
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="text-lg leading-relaxed text-charcoal/75">
-            {settings.frontend_content?.about_p2 || "We're an open garden bar, restaurant, and events venue known across the North Coast for the best nyama choma in town. By day, we're your family's favourite lunch spot. By night, the garden comes alive with live music, cold drinks, and the glow of the choma fire."}
-          </p>
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+          <div className="space-y-6 text-charcoal/80">
+            <p className="text-lg leading-relaxed">
+              {settings.frontend_content?.about_p1 ||
+                "For over 8 years, Choma Zone Mtwapa Palms has been serving Mtwapa locals, Mombasa families, and upcountry travelers with authentic charcoal-grilled nyama choma, cold drinks, and friendly coastal service."}
+            </p>
+            <p className="text-lg leading-relaxed">
+              {settings.frontend_content?.about_p2 ||
+                "We've built our reputation on tender, well-seasoned nyama choma served with fresh kachumbari and ugali. By day, parents relax while kids play in our fenced playground. In the evening, the garden lights up with live bands, Rhumba nights, and cold drinks."}
+            </p>
+          </div>
         </div>
 
         <div className="mt-16 grid gap-8 md:grid-cols-3">

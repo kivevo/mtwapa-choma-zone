@@ -23,8 +23,8 @@ export function HappyHourSection({
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Evenings & Bar"
-          title="Smooth Evenings, Good Music, Cold Drinks"
-          description="As the sun sets over Mtwapa, the garden transforms. Happy hour deals, live Rhumba and Mugithi nights, DJ sets, and the best sundowner spot on the North Coast."
+          title="Drinks & Evening Entertainment"
+          description="As evening sets in over Mtwapa, enjoy our daily happy hour deals, live Rhumba & Mugithi nights, resident DJs, and cold drinks in the garden."
           dark
         />
 

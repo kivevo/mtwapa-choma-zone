@@ -67,7 +67,8 @@ export function Hero({ settings }: HeroProps) {
             </span>
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-sm sm:text-base md:text-lg leading-relaxed text-sand/85 sm:mt-6">
-            {settings.frontend_content?.hero_description || "Charcoal-grilled perfection in a lush makuti garden on the Mombasa–Malindi Highway. Sundowners, family fun, events & the coast's favourite stopover spot."}
+            {settings.frontend_content?.hero_description ||
+              "Freshly roasted goat & beef, cold drinks, and open-air garden seating right on the Mombasa–Malindi Highway. Stop by for lunch, bring the family on Sunday, or pull in for a quick highway break."}
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5 sm:mt-10 sm:gap-4">

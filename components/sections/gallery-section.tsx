@@ -56,8 +56,8 @@ export function GallerySection({
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Gallery"
-          title="Step Into Our Garden"
-          description="Golden-hour makuti pavilions, sizzling choma, kids at play, and the iconic I ❤️ MTWAPA sign — see why Mtwapa loves us."
+          title="Life at Choma Zone"
+          description="Take a look at our open garden seating, charcoal grills, kids' playground, and real moments shared with our guests."
         />
 
         <div className="mb-8 flex flex-wrap justify-center gap-2">

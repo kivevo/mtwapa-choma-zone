@@ -44,8 +44,8 @@ export function EventsSection({ eventTypes, settings }: EventsSectionProps) {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Events & Celebrations"
-          title="Your Garden Party Starts Here"
-          description="Birthdays, mbuzi choma parties, corporate functions, wedding photoshoots, and Family Fun Days — we handle the space, you bring the joy."
+          title="Host Your Event With Us"
+          description="Planning a birthday party, graduation, family gathering, or company get-together? We have open garden spaces and custom choma platters ready for your group."
         />
 
         <div className="mb-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
