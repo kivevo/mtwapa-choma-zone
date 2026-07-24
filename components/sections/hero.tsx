@@ -20,21 +20,21 @@ const HERO_SLIDES = [
     title_highlight: "Nyama Choma",
     title_suffix: "Open Garden Hospitality",
     description: "Freshly roasted goat & beef, cold drinks, and open-air garden seating right on the Mombasa–Malindi Highway.",
-    image: "/images/real/insta_real_2.jpg", // The choma grill/meat
+    image: "/images/real/insta_real_4.jpg", // Real venue exterior — clean sky & signage
   },
   {
     title_prefix: "Sundays are for",
     title_highlight: "Family Fun",
     title_suffix: "At the Palms",
     description: "Bring the whole family for our Sunday Fun Day. Great choma for you, a safe fenced playground for the kids.",
-    image: "/images/real/insta_real_7.jpg", // Kids playground
+    image: "/images/real/insta_real_5.jpg", // Real venue exterior — different angle
   },
   {
     title_prefix: "The Perfect",
     title_highlight: "Garden Escape",
     title_suffix: "Events & Meetups",
     description: "Lush makuti pavilions, secure parking, and live Rhumba nights. Your favourite spot on the North Coast.",
-    image: "/images/real/insta_real_8.jpg", // Garden
+    image: "/images/real/insta_real_9.jpg", // Garden dining with real ambience
   }
 ];
 
