@@ -43,14 +43,14 @@ export const FALLBACK_SETTINGS: SiteSettings = {
     about_title: "Welcome to Choma Zone Mtwapa Palms",
     about_p1: "For over 8 years, Choma Zone Mtwapa Palms has been serving Mtwapa locals, Mombasa families, and upcountry travelers with authentic charcoal-grilled nyama choma, cold drinks, and friendly coastal service.",
     about_p2: "Located right opposite Galana Petrol Station, we offer a relaxed open garden setting, secure parking, a fenced kids' playground, and live music on weekends. Whether you're stopping by for a quick lunch, bringing the family, or hosting a get-together, we're glad to have you.",
-    about_image_1: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80",
-    about_image_2: "https://images.unsplash.com/photo-1544148103-0773bf10d330?w=800&q=80",
+    about_image_1: "/images/real/insta_real_2.jpg",
+    about_image_2: "/images/real/insta_real_8.jpg",
     family_fun_title: "Fenced Playground & Family Dining",
     family_fun_desc: "Sundays at Choma Zone are all about family. While you enjoy fresh choma and cold drinks in the garden, the kids have plenty of room to play safely in our fenced playground.",
-    family_fun_image: "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=800&q=80",
+    family_fun_image: "/images/real/insta_real_7.jpg",
     stopover_title: "Convenient Highway Stopover",
     stopover_desc: "Traveling along the Mombasa–Malindi Highway? Turn in opposite Galana Petrol Station. We have secure parking, clean washrooms, hot coffee, pizzas, and quick meals to get you back on the road refreshed.",
-    stopover_image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80",
+    stopover_image: "/images/real/insta_real_4.jpg",
     footer_text: "Your favourite spot in Mtwapa for fresh nyama choma, family Sunday lunches, and open garden dining on the Mombasa–Malindi Highway."
   },
   updated_at: new Date().toISOString(),
@@ -382,37 +382,117 @@ export const FALLBACK_CALENDAR: CalendarEvent[] = [
 
 const PLACEHOLDER_IMAGES: Record<string, string> = {
   garden:
-    "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80",
+    "/images/real/insta_real_8.jpg",
   food_choma:
-    "https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80",
+    "/images/real/insta_real_2.jpg",
   kids_playground:
-    "https://images.unsplash.com/photo-1575783970733-1aaedde1db74?w=800&q=80",
+    "/images/real/insta_real_7.jpg",
   choma_area:
-    "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80",
+    "/images/real/fb_real_0.jpg",
   coffee_shop:
-    "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800&q=80",
+    "/images/real/insta_real_9.jpg",
   parking:
-    "https://images.unsplash.com/photo-1590674899484-d5640e854abe?w=800&q=80",
+    "/images/real/insta_real_4.jpg",
   signage:
-    "https://images.unsplash.com/photo-1514933651103-005eec06cb04?w=800&q=80",
+    "/images/real/insta_real_5.jpg",
   bar_area:
-    "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=800&q=80",
+    "/images/real/insta_real_2.jpg",
   events:
-    "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=800&q=80",
+    "/images/real/insta_real_10.jpg",
 };
 
-export const FALLBACK_GALLERY: GalleryImage[] = (
-  Object.entries(PLACEHOLDER_IMAGES) as [GalleryImage["category"], string][]
-).map(([category, url], i) => ({
-  id: `g${i}`,
-  category,
-  storage_path: url,
-  caption: `${category.replace(/_/g, " ")} at Choma Zone Mtwapa Palms`,
-  description: null,
-  display_order: i,
-  is_visible: true,
-  created_at: new Date().toISOString(),
-}));
+export const FALLBACK_GALLERY: GalleryImage[] = [
+  {
+    id: "g0",
+    category: "garden",
+    storage_path: "/images/real/insta_real_8.jpg",
+    caption: "The ambience & the hideout — perfect for meetups and groups",
+    description: null,
+    display_order: 0,
+    is_visible: true,
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: "g1",
+    category: "food_choma",
+    storage_path: "/images/real/insta_real_2.jpg",
+    caption: "Maskani with a cold drink — nyama choma done right 🔥",
+    description: null,
+    display_order: 1,
+    is_visible: true,
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: "g2",
+    category: "kids_playground",
+    storage_path: "/images/real/insta_real_7.jpg",
+    caption: "Perfect weekend family vibes — Food. Fun. Family. Memories that last!",
+    description: null,
+    display_order: 2,
+    is_visible: true,
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: "g3",
+    category: "signage",
+    storage_path: "/images/real/insta_real_4.jpg",
+    caption: "Our iconic I ❤️ MTWAPA sign — snap a photo and tag us!",
+    description: null,
+    display_order: 3,
+    is_visible: true,
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: "g4",
+    category: "garden",
+    storage_path: "/images/real/insta_real_6.jpg",
+    caption: "Your perfect photoshoot location — beautiful garden spaces & pool table",
+    description: null,
+    display_order: 4,
+    is_visible: true,
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: "g5",
+    category: "events",
+    storage_path: "/images/real/insta_real_9.jpg",
+    caption: "Meet. Connect. Enjoy — perfect for business meetings & luncheons",
+    description: null,
+    display_order: 5,
+    is_visible: true,
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: "g6",
+    category: "choma_area",
+    storage_path: "/images/real/fb_real_0.jpg",
+    caption: "Choma Zone Mtwapa Palms — an open garden restaurant, bar & choma zone",
+    description: null,
+    display_order: 6,
+    is_visible: true,
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: "g7",
+    category: "events",
+    storage_path: "/images/real/insta_real_10.jpg",
+    caption: "Reconnect. Laugh. Eat. Make Memories — one destination for the whole family",
+    description: null,
+    display_order: 7,
+    is_visible: true,
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: "g8",
+    category: "garden",
+    storage_path: "/images/real/insta_real_5.jpg",
+    caption: "Right on the Mombasa–Malindi Highway — opposite Galana Petrol Station",
+    description: null,
+    display_order: 8,
+    is_visible: true,
+    created_at: new Date().toISOString(),
+  },
+];
 
 export function getGalleryImageUrl(
   storagePath: string,
