@@ -120,7 +120,7 @@ export function Header({ settings }: HeaderProps) {
         <div
           className={cn(
             "absolute inset-x-0 top-full overflow-hidden bg-charcoal/95 backdrop-blur-md transition-all duration-300 lg:hidden",
-            isOpen ? "max-h-[32rem] border-t border-white/10" : "max-h-0"
+            isOpen ? "max-h-[85vh] overflow-y-auto border-t border-white/10 shadow-xl" : "max-h-0"
           )}
         >
           <nav className="flex flex-col px-4 pb-6 pt-3 sm:px-6">
