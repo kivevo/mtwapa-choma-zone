@@ -74,45 +74,7 @@ export function TestimonialsSection({
           </blockquote>
           <p className="mt-6 font-semibold text-ember">{t.customer_name}</p>
 
-          {testimonials.length > 1 && (
-            <div className="mt-8 flex items-center justify-center gap-4">
-              <button
-                type="button"
-                onClick={() =>
-                  setCurrent(
-                    (c) => (c - 1 + testimonials.length) % testimonials.length
-                  )
-                }
-                className="rounded-full border border-palm/20 p-2 hover:bg-palm/5"
-                aria-label="Previous testimonial"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </button>
-              <div className="flex gap-2">
-                {testimonials.map((_, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => setCurrent(i)}
-                    className={`h-2 rounded-full transition-all ${
-                      i === current ? "w-6 bg-ember" : "w-2 bg-palm/20"
-                    }`}
-                    aria-label={`Go to testimonial ${i + 1}`}
-                  />
-                ))}
-              </div>
-              <button
-                type="button"
-                onClick={() =>
-                  setCurrent((c) => (c + 1) % testimonials.length)
-                }
-                className="rounded-full border border-palm/20 p-2 hover:bg-palm/5"
-                aria-label="Next testimonial"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </button>
-            </div>
-          )}
+
         </div>
 
         <div className="mt-12 text-center">
