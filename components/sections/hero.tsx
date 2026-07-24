@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { MapPin, Clock } from "lucide-react";
+import { MapPin, Clock, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ContactButtons } from "@/components/contact-buttons";
 import { ReservationModal } from "@/components/sections/reservation-modal";
@@ -14,9 +14,39 @@ interface HeroProps {
   settings: SiteSettings;
 }
 
+function useIsOpen(hours: SiteSettings["opening_hours"]) {
+  const [isOpen, setIsOpen] = useState(false);
+  useEffect(() => {
+    const check = () => {
+      const now = new Date();
+      const day = now.getDay(); // 0=Sun, 6=Sat
+      const hhmm = now.getHours() * 100 + now.getMinutes();
+      const isWeekend = day === 0 || day === 6;
+      const rangeStr = isWeekend ? hours.sat_sun : hours.mon_fri;
+      try {
+        const [openStr, closeStr] = rangeStr.split(/\s*[-–]\s*/);
+        const toNum = (s: string) => {
+          const [h, m] = s.trim().split(":").map(Number);
+          return h * 100 + (m || 0);
+        };
+        const open = toNum(openStr);
+        const close = closeStr?.toLowerCase().includes("late") ? 2359 : toNum(closeStr);
+        setIsOpen(hhmm >= open && hhmm <= close);
+      } catch {
+        setIsOpen(false);
+      }
+    };
+    check();
+    const interval = setInterval(check, 60000);
+    return () => clearInterval(interval);
+  }, [hours]);
+  return isOpen;
+}
+
 export function Hero({ settings }: HeroProps) {
   const [showReservation, setShowReservation] = useState(false);
   const hours = settings.opening_hours;
+  const isOpen = useIsOpen(hours);
 
   return (
     <>
@@ -55,6 +85,27 @@ export function Hero({ settings }: HeroProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
+          {/* Open Now / Closed live badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="mb-4 inline-flex items-center gap-2"
+          >
+            <span
+              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${
+                isOpen
+                  ? "border-green-500/30 bg-green-500/20 text-green-300"
+                  : "border-red-400/20 bg-red-500/15 text-red-300"
+              }`}
+            >
+              <span
+                className={`h-2 w-2 rounded-full ${isOpen ? "animate-pulse bg-green-400" : "bg-red-400"}`}
+              />
+              {isOpen ? "Open Now" : "Currently Closed"}
+            </span>
+          </motion.div>
+
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-gold sm:mb-4 sm:text-sm sm:tracking-[0.25em]">
             {settings.tagline}
           </p>
@@ -62,7 +113,7 @@ export function Hero({ settings }: HeroProps) {
             {settings.frontend_content?.hero_title_prefix || "Mtwapa's Best"}{" "}
             <span className="text-ember">{settings.frontend_content?.hero_title_highlight || "Nyama Choma"}</span>
             <br />
-            <span className="block mt-1 text-xl font-medium sm:mt-2 sm:text-3xl md:text-4xl lg:text-5xl text-sand/90">
+            <span className="mt-1 block text-xl font-medium sm:mt-2 sm:text-3xl md:text-4xl lg:text-5xl text-sand/90">
               {settings.frontend_content?.hero_title_suffix || "Open Garden Hospitality"}
             </span>
           </h1>
@@ -104,6 +155,23 @@ export function Hero({ settings }: HeroProps) {
           </div>
         </motion.div>
       </div>
+
+      {/* Animated scroll-down arrow */}
+      <motion.a
+        href="/#about"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2, duration: 0.6 }}
+        className="absolute bottom-28 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-sand/40 transition-colors hover:text-sand"
+        aria-label="Scroll down"
+      >
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.6, ease: "easeInOut", repeat: Infinity }}
+        >
+          <ChevronDown className="h-6 w-6" />
+        </motion.div>
+      </motion.a>
 
       <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand to-transparent" />
     </section>

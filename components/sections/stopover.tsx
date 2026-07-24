@@ -33,14 +33,16 @@ export function StopoverSection({ settings }: { settings: SiteSettings }) {
               Mombasa–Malindi Highway, Mtwapa
             </div>
           </div>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-3">
             {stops.map((stop) => (
               <div
                 key={stop.label}
-                className="flex flex-col items-center gap-2 rounded-2xl bg-sand px-6 py-4 text-center"
+                className="flex flex-col items-center gap-2 rounded-2xl bg-white px-5 py-4 text-center shadow-md shadow-charcoal/5 transition-all hover:-translate-y-0.5 hover:shadow-lg"
               >
-                <stop.icon className="h-6 w-6 text-ember" />
-                <span className="text-sm font-medium text-charcoal">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-ember/10">
+                  <stop.icon className="h-5 w-5 text-ember" />
+                </div>
+                <span className="text-xs font-semibold text-charcoal">
                   {stop.label}
                 </span>
               </div>

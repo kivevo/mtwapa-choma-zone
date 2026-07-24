@@ -4,11 +4,11 @@ import { AnimatedSection } from "@/components/ui/animated-section";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ContactForm } from "@/components/forms/contact-form";
 import { ContactButtons } from "@/components/contact-buttons";
-import { Button } from "@/components/ui/button";
 import { generateGoogleMapsDirections, generateGoogleMapsEmbed } from "@/lib/utils";
 import { MapPin, Mail, Clock } from "lucide-react";
 import { formatPhoneDisplay } from "@/lib/utils";
 import type { SiteSettings } from "@/types/database.types";
+
 
 interface LocationSectionProps {
   settings: SiteSettings;
@@ -80,7 +80,7 @@ export function LocationSection({ settings }: LocationSectionProps) {
             </div>
           </div>
 
-          <div>
+          <div className="relative">
             <div className="overflow-hidden rounded-3xl shadow-lg">
               <iframe
                 src={generateGoogleMapsEmbed(settings.latitude || 0, settings.longitude || 0)}
@@ -93,15 +93,16 @@ export function LocationSection({ settings }: LocationSectionProps) {
                 className="w-full"
               />
             </div>
-            <Button asChild className="mt-4 w-full" size="lg">
-              <a
-                href={generateGoogleMapsDirections(settings.google_place_id || "")}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Get Directions
-              </a>
-            </Button>
+            {/* Floating Get Directions pill */}
+            <a
+              href={generateGoogleMapsDirections(settings.google_place_id || "")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-charcoal shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl"
+            >
+              <MapPin className="h-4 w-4 text-ember" />
+              Get Directions
+            </a>
           </div>
         </div>
       </div>

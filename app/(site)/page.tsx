@@ -21,6 +21,7 @@ import { TestimonialsSection } from "@/components/sections/testimonials";
 import { SocialShowcaseSection } from "@/components/sections/social-showcase";
 import { LocationSection } from "@/components/sections/location-section";
 import { RestaurantJsonLd } from "@/components/seo/json-ld";
+import { WhatsAppFab } from "@/components/ui/whatsapp-fab";
 
 export default async function HomePage() {
   const [
@@ -69,6 +70,8 @@ export default async function HomePage() {
       <TestimonialsSection testimonials={testimonials} />
       <SocialShowcaseSection settings={settings} />
       <LocationSection settings={settings} />
+      <WhatsAppFab phone={settings.phone_primary} />
     </>
   );
 }
+

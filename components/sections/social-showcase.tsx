@@ -11,11 +11,11 @@ interface SocialShowcaseSectionProps {
 
 const posts = [
   {
-    image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80",
-    alt: "Nyama Choma platter",
-    caption: "Fresh mbuzi choma sizzling hot off the coals. Served with kachumbari & ugali.",
-    likes: "482",
-    handle: "@mtwapapalms",
+    image: "/images/fb-profile.jpg",
+    alt: "Choma Zone Mtwapa Palms official logo/sign",
+    caption: "Welcome to Choma Zone! Open-air garden restaurant, bar & delicious nyama choma.",
+    likes: "4.6k",
+    handle: "@ChomaZoneMtwapaPalm",
   },
   {
     image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80",
