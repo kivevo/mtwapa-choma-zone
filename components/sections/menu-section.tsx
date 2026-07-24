@@ -25,9 +25,9 @@ export function MenuSection({ categories, settings, preview = false }: MenuSecti
     <AnimatedSection id="menu" className="bg-white py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Food & Choma"
-          title="From the Grill to Your Table"
-          description="Signature nyama choma, Kenyan classics, pizza, coffee, ice cream, and a full garden bar — all cooked with coastal love."
+          eyebrow="Our Menu"
+          title="What We Serve"
+          description="Freshly grilled nyama choma, Kenyan meals, pizza, ice cream, coffee, and a full garden bar. Something for everyone."
         />
 
         {signature && (
@@ -35,18 +35,18 @@ export function MenuSection({ categories, settings, preview = false }: MenuSecti
             <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-ember/20 blur-3xl" />
             <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <div>
-                <span className="inline-flex items-center gap-2 rounded-full bg-ember/20 px-4 py-1.5 text-sm font-semibold text-ember">
-                  <Flame className="h-4 w-4" />
-                  Mtwapa&apos;s Best Nyama Choma
-                </span>
-                <h3 className="mt-4 font-display text-3xl font-bold text-sand md:text-4xl">
-                  Signature Choma
-                </h3>
-                <p className="mt-3 max-w-lg text-sand/75">
-                  Slow-roasted over real charcoal in our open garden choma area.
-                  Beef, goat, and whole-roast celebrations — this is what we&apos;re
-                  famous for.
-                </p>
+                  <span className="inline-flex items-center gap-2 rounded-full bg-ember/20 px-4 py-1.5 text-sm font-semibold text-ember">
+                    <Flame className="h-4 w-4" />
+                    Our Specialty
+                  </span>
+                  <h3 className="mt-4 font-display text-3xl font-bold text-sand md:text-4xl">
+                    Nyama Choma
+                  </h3>
+                  <p className="mt-3 max-w-lg text-sand/75">
+                    Roasted fresh over charcoal in our open-air garden grill. Choose beef, goat,
+                    or whole-roast for group occasions — seasoned simply and served hot with
+                    kachumbari and ugali.
+                  </p>
               </div>
               <div className="flex shrink-0 flex-col gap-3">
                 {signature.menu_items.slice(0, 3).map((item) => (

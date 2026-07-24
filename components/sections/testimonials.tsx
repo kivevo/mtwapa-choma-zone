@@ -30,11 +30,11 @@ export function TestimonialsSection({
       <AnimatedSection className="bg-sand py-20 lg:py-28">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
           <SectionHeading
-            eyebrow="Testimonials"
-            title="What Our Guests Say"
+            eyebrow="Reviews"
+            title="What People Say About Us"
           />
           <p className="mt-4 text-charcoal/70 mb-8">
-            We&apos;d love to hear about your experience! Be the first to leave a review.
+            Enjoyed your visit? We&apos;d love to hear from you.
           </p>
           <button
             onClick={() => setShowForm(true)}
@@ -55,8 +55,8 @@ export function TestimonialsSection({
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <SectionHeading
-            eyebrow="Testimonials"
-            title="What Our Guests Say"
+            eyebrow="Reviews"
+            title="What People Say About Us"
           />
         </div>
 

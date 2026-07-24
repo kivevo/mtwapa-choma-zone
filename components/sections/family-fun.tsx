@@ -12,26 +12,26 @@ export function FamilyFunSection({ settings }: { settings: SiteSettings }) {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Family Fun"
-          title={settings.frontend_content?.family_fun_title || "Kids Play Safe, Parents Relax"}
-          description={settings.frontend_content?.family_fun_desc || "Our fully equipped, supervised, and fenced children's playground is a key reason families keep coming back. Slides, swings, and laughter — while you enjoy the choma."}
+          title={settings.frontend_content?.family_fun_title || "Kids' Playground & Family Dining"}
+          description={settings.frontend_content?.family_fun_desc || "Every Sunday, bring the whole family. The kids play in our safe, fenced playground while you sit back, order fresh choma, and enjoy a cold drink."}
         />
 
         <div className="grid gap-8 md:grid-cols-3">
           {[
             {
               icon: Shield,
-              title: "Supervised & Fenced",
-              text: "Manned play area so you can dine and unwind with peace of mind.",
+              title: "Fenced & Secure",
+              text: "Our playground is fully fenced so you can eat and relax without worrying about the kids.",
             },
             {
               icon: Smile,
-              title: "All Ages Welcome",
-              text: "From toddlers to tweens — equipment for every stage of childhood fun.",
+              title: "Fun for All Ages",
+              text: "Slides, swings, and open space. From toddlers to older kids — there's room to run around.",
             },
             {
               icon: PartyPopper,
-              title: "Family Fun Days",
-              text: "Recurring themed days with entertainment, games, and special treats for the whole family.",
+              title: "Sunday Family Days",
+              text: "Every Sunday we have special family deals, kids' activities, and live entertainment.",
             },
           ].map((item) => (
             <div

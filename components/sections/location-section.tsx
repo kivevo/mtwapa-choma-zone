@@ -21,9 +21,9 @@ export function LocationSection({ settings }: LocationSectionProps) {
     <AnimatedSection id="location" className="bg-white py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Find Us"
-          title="On the Mombasa–Malindi Highway"
-          description="Directly opposite Galana Petrol Station, Mtwapa — you can't miss our open garden and the I ❤️ MTWAPA sign."
+          eyebrow="Where to Find Us"
+          title="We're on the Mombasa–Malindi Highway"
+          description="Opposite Galana Petrol Station in Mtwapa. Easy to spot — look for our big garden, the I ❤️ MTWAPA sign, and plenty of parking."
         />
 
         <div id="contact" className="grid gap-12 lg:grid-cols-2">
