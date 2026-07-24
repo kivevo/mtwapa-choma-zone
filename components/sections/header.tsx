@@ -119,7 +119,7 @@ export function Header({ settings }: HeaderProps) {
         {/* Mobile menu — full dropdown */}
         <div
           className={cn(
-            "absolute inset-x-0 top-full overflow-hidden bg-charcoal/98 backdrop-blur-md transition-all duration-300 lg:hidden",
+            "absolute inset-x-0 top-full overflow-hidden bg-charcoal/95 backdrop-blur-md transition-all duration-300 lg:hidden",
             isOpen ? "max-h-[32rem] border-t border-white/10" : "max-h-0"
           )}
         >
